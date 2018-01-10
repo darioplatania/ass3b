@@ -1,9 +1,9 @@
 //
-// Questo file è stato generato dall'architettura JavaTM per XML Binding (JAXB) Reference Implementation, v2.2.8-b130911.1802 
-// Vedere <a href="http://java.sun.com/xml/jaxb">http://java.sun.com/xml/jaxb</a> 
-// Qualsiasi modifica a questo file andrà persa durante la ricompilazione dello schema di origine. 
-// Generato il: 2018.01.10 alle 03:23:51 PM CET 
+// Questo file xe8 stato generato dall'architettura JavaTM per XML Binding (JAXB) Reference Implementation, v2.3.0-b170531.0717 
+// Vedere <a href="https://jaxb.java.net/">https://jaxb.java.net/</a> 
+// Qualsiasi modifica a questo file andrxe0 persa durante la ricompilazione dello schema di origine. 
+// Generato il: 2018.01.10 alle 04:11:37 PM CET 
 //
 
-@javax.xml.bind.annotation.XmlSchema(namespace = "http://www.example.org/NfvDeployer/", elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)
+@javax.xml.bind.annotation.XmlSchema(namespace = "http://www.example.org/nfvInfo", elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)
 package it.polito.dp2.NFV.sol3.jaxb;

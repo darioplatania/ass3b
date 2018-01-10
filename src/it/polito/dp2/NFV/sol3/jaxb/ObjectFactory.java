@@ -1,8 +1,8 @@
 //
-// Questo file è stato generato dall'architettura JavaTM per XML Binding (JAXB) Reference Implementation, v2.2.8-b130911.1802 
-// Vedere <a href="http://java.sun.com/xml/jaxb">http://java.sun.com/xml/jaxb</a> 
-// Qualsiasi modifica a questo file andrà persa durante la ricompilazione dello schema di origine. 
-// Generato il: 2018.01.10 alle 03:23:51 PM CET 
+// Questo file xe8 stato generato dall'architettura JavaTM per XML Binding (JAXB) Reference Implementation, v2.3.0-b170531.0717 
+// Vedere <a href="https://jaxb.java.net/">https://jaxb.java.net/</a> 
+// Qualsiasi modifica a questo file andrxe0 persa durante la ricompilazione dello schema di origine. 
+// Generato il: 2018.01.10 alle 04:11:37 PM CET 
 //
 
 
@@ -37,99 +37,115 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link MyFunctionalType }
+     * Create an instance of {@link Np }
      * 
      */
-    public MyFunctionalType createMyFunctionalType() {
-        return new MyFunctionalType();
+    public Np createNp() {
+        return new Np();
     }
 
     /**
-     * Create an instance of {@link MyLink }
+     * Create an instance of {@link NffgImpl }
      * 
      */
-    public MyLink createMyLink() {
-        return new MyLink();
+    public NffgImpl createNffgImpl() {
+        return new NffgImpl();
     }
 
     /**
-     * Create an instance of {@link MyHost }
+     * Create an instance of {@link NodeImpl }
      * 
      */
-    public MyHost createMyHost() {
-        return new MyHost();
+    public NodeImpl createNodeImpl() {
+        return new NodeImpl();
     }
 
     /**
-     * Create an instance of {@link MyIn }
+     * Create an instance of {@link LinkImpl }
      * 
      */
-    public MyIn createMyIn() {
-        return new MyIn();
+    public LinkImpl createLinkImpl() {
+        return new LinkImpl();
     }
 
     /**
-     * Create an instance of {@link MyPerformance }
+     * Create an instance of {@link In }
      * 
      */
-    public MyPerformance createMyPerformance() {
-        return new MyPerformance();
+    public In createIn() {
+        return new In();
     }
 
     /**
-     * Create an instance of {@link MyNffg }
+     * Create an instance of {@link HostImpl }
      * 
      */
-    public MyNffg createMyNffg() {
-        return new MyNffg();
+    public HostImpl createHostImpl() {
+        return new HostImpl();
     }
 
     /**
-     * Create an instance of {@link MyNode }
+     * Create an instance of {@link PerformanceImpl }
      * 
      */
-    public MyNode createMyNode() {
-        return new MyNode();
+    public PerformanceImpl createPerformanceImpl() {
+        return new PerformanceImpl();
     }
 
     /**
-     * Create an instance of {@link MyCatalog }
+     * Create an instance of {@link Catalog }
      * 
      */
-    public MyCatalog createMyCatalog() {
-        return new MyCatalog();
+    public Catalog createCatalog() {
+        return new Catalog();
     }
 
     /**
-     * Create an instance of {@link MyNP }
+     * Create an instance of {@link FtypeImpl }
      * 
      */
-    public MyNP createMyNP() {
-        return new MyNP();
+    public FtypeImpl createFtypeImpl() {
+        return new FtypeImpl();
     }
 
     /**
-     * Create an instance of {@link MyHosts }
+     * Create an instance of {@link NffgC }
      * 
      */
-    public MyHosts createMyHosts() {
-        return new MyHosts();
+    public NffgC createNffgC() {
+        return new NffgC();
     }
 
     /**
-     * Create an instance of {@link MyNffgs }
+     * Create an instance of {@link HostC }
      * 
      */
-    public MyNffgs createMyNffgs() {
-        return new MyNffgs();
+    public HostC createHostC() {
+        return new HostC();
     }
 
     /**
-     * Create an instance of {@link MyNodes }
+     * Create an instance of {@link NodesC }
      * 
      */
-    public MyNodes createMyNodes() {
-        return new MyNodes();
+    public NodesC createNodesC() {
+        return new NodesC();
+    }
+
+    /**
+     * Create an instance of {@link LinkC }
+     * 
+     */
+    public LinkC createLinkC() {
+        return new LinkC();
+    }
+
+    /**
+     * Create an instance of {@link PerformanceC }
+     * 
+     */
+    public PerformanceC createPerformanceC() {
+        return new PerformanceC();
     }
 
 }
