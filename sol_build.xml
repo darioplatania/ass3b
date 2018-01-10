@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project basedir="." default="build-service" name="sol_build">
+
+	<property name="basedir" location="." />
+	<property name="build.dir" location="${basedir}/build" />
+	<property name="src.dir" location="${basedir}/src" />
+	<property name="ext.lib.dir" location="/opt/dp2/shared/lib"/>
+	<property name="schema.dir" location="${basedir}/xsd" />
+	<property name="lib.dir" location="${basedir}/lib" />
+	<property name="negotiate.wadl" value="http://localhost:8080/Neo4JSimpleXML/webapi/application.wadl" />
+	<property name="path.prefix" value="it/polito/dp2/NFV/sol3" />
+	
+	<!-- Java compiler settings -->
+	<property name="debug" value="true" />
+	<property name="debuglevel" value="source,lines,vars" />
+	<property name="target" value="1.8" />
+	<property name="source" value="1.8" />
+	
+	<path id="service.classpath">
+		<fileset dir="${ext.lib.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+	<!-- Create annotated classes from xsd schema: -->
+	<target name="generate-bindings" description="Generate bindings from schema">
+		<exec executable="xjc" failonerror="true">
+			<arg value="-d" />
+			<arg value="${src.dir}" />
+			<arg value="-p" />
+			<arg value="it.polito.dp2.NFV.sol3.jaxb" />
+			<arg value="${schema.dir}/NfvDeployer.xsd" />
+		</exec>
+
+		<echo message=" --(1) Create Classes from xsd --> Done" />
+	</target>
+
+	<!-- define wjc task (WADL to Java) -->
+	<taskdef name="wjc" classname="org.jvnet.ws.wadl2java.WJCTask">
+		<classpath>
+			<fileset dir="${ext.lib.dir}" includes="*.jar" />
+		</classpath>
+	</taskdef>
+
+	
+	<target name="generate-artifacts" depends="generate-bindings">
+		<echo message="Compiling the descriptions..." />
+		<wjc description="${negotiate.wadl}" package="it.polito.dp2.NFV.sol3.service.neo4j" autoSchemaPackage="false" target="${src.dir}">
+			<customizations dir="${basedir}" includes="binding.xjc" />
+			<produces dir="${src.dir}/it/polito/dp2/NFV/sol3/service/neo4j" includes="*.java" />
+			<depends dir="${basedir}" includes="build.xml" />
+		</wjc>
+		<delete file="./src/it/polito/dp2/NFV/sol3/neo4j/Localhost_Neo4JXMLRest.java" />
+		<echo message=" --(2) Create Classes from wadl --> Done" />
+	</target>
+
+	<target name="build-service" depends="generate-artifacts">
+		<javac debug="on" fork="true" destdir="${build.dir}" srcdir="${src.dir}" includeantruntime="false" source="${source}" target="${target}">
+			<include name="${path.prefix}//**/*.java" />
+			<classpath>
+				<path refid="service.classpath" />
+			</classpath>
+		</javac>
+		<echo message=" --(3)--> Done" />
+	</target>
+
+	<target name="build-client">
+		<javac debug="on" fork="true" destdir="${build.dir}" srcdir="${src.dir}" includeantruntime="false" source="${source}" target="${target}">
+			<include name="${path.prefix}//**/*.java" />
+			<classpath>
+				<path refid="service.classpath" />
+			</classpath>
+		</javac>
+		<echo message=" --(4)--> Done" />
+	</target>
+</project>
+
+
+

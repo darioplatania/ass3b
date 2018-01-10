@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<xs:schema elementFormDefault="qualified"
+           xmlns="http://www.example.org/nfvInfo"
+           targetNamespace="http://www.example.org/nfvInfo"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:ni="http://www.example.org/nfvInfo">
+           
+<!-- np -->
+ <xs:element name="np">
+	<xs:complexType>
+       <xs:sequence>
+           <xs:element ref="ni:nffgImpl" minOccurs="0" maxOccurs="unbounded" />
+           <xs:element ref="ni:in"/>
+           <xs:element ref="ni:catalog" minOccurs="1"/>
+       </xs:sequence>
+   </xs:complexType>
+   
+   <!-- unique of nffg name -->
+        <xs:key name="nffg_id">
+            <xs:selector xpath="ni:nffgImpl"/>
+            <xs:field xpath="@name_nffg"/>
+        </xs:key>
+
+        <!-- unique of node name -->
+        <xs:key name="node_id">
+            <xs:selector xpath="ni:nffgImpl/ni:nodeImpl"/>
+            <xs:field xpath="@node_name"/>
+        </xs:key>
+        
+        <xs:key name="link_id">
+            <xs:selector xpath="ni:nodeImpl/ni:linkImpl"/>
+            <xs:field xpath="@link_name"/>
+        </xs:key>
+
+        <!-- unique of host_id -->
+        <xs:key name="host_id">
+            <xs:selector xpath="ni:in/ni:hostImpl"/>
+            <xs:field xpath="@hostName"/>
+        </xs:key>
+
+        <!-- unique of functional_type_id -->
+        <xs:key name="functionaltype_id">
+            <xs:selector xpath="ni:catalog/ni:ftypeImpl"/>
+            <xs:field xpath="@functionaltypeId"/>
+        </xs:key>
+
+        <!-- KEYREF -->
+        <xs:keyref name="hostName" refer="ni:host_id">
+            <xs:selector xpath="ni:nffgImpl/ni:nodeImpl"/>
+            <xs:field xpath="@hostName"/>
+        </xs:keyref>
+
+        <xs:keyref name="functionaltypeId" refer="ni:functionaltype_id">
+            <xs:selector xpath="ni:nffgImpl/ni:nodeImpl"/>
+            <xs:field xpath="@functionaltypeId"/>
+        </xs:keyref>
+
+        <xs:keyref name="sourceNode" refer="ni:node_id">
+            <xs:selector xpath="ni:nffgImpl/ni:nodeImpl/ni:linkImpl"/>
+            <xs:field xpath="@sourceNode"/>
+        </xs:keyref>
+
+        <xs:keyref name="destinationNode" refer="ni:node_id">
+            <xs:selector xpath="ni:nffgImpl/ni:nodeImpl/ni:linkImpl"/>
+            <xs:field xpath="@destinationNode"/>
+        </xs:keyref>
+
+        <xs:keyref name="sourceHost" refer="ni:host_id">
+            <xs:selector xpath="ni:in/ni:performanceImpl"/>
+            <xs:field xpath="@sourceHost"/>
+        </xs:keyref>
+
+        <xs:keyref name="destinationHost" refer="ni:host_id">
+            <xs:selector xpath="ni:in/ni:performanceImpl"/>
+            <xs:field xpath="@destinationHost"/>
+        </xs:keyref>
+
+</xs:element>
+           
+<!-- nffg -->
+
+<xs:element name="nffgImpl">
+ 	<xs:complexType>
+        <xs:sequence>
+            <xs:element ref="ni:nodeImpl" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+        <xs:attribute name="name_nffg" type="ni:name" use="required"/>
+        <xs:attribute name="deploy_time" type="xs:dateTime" use="required"/>
+    </xs:complexType>
+</xs:element>
+ 
+ <!-- node -->
+ <xs:element name="nodeImpl">
+	 <xs:complexType>
+		 <xs:sequence>
+		  	<xs:element ref="ni:linkImpl" minOccurs="0" maxOccurs="unbounded"/>
+		  </xs:sequence>
+	 	<xs:attribute name="node_name" type="ni:name" use="required"/>
+        <xs:attribute name="host_name" type="ni:name" use="required"/>
+        <xs:attribute name="functionaltypeId" type="ni:name" use="required"/>
+	 </xs:complexType>
+ </xs:element>
+ 
+ <!-- link -->
+ <xs:element name="linkImpl">
+ 	<xs:complexType>
+ 		<xs:attribute name="link_name" type="ni:name" use="required"/>
+        <xs:attribute name="sourceNode" type="ni:name" use="required"/>
+        <xs:attribute name="destinationNode" type="ni:name" use="required"/>
+        <xs:attribute name="min_throughput" type="xs:float"/>
+        <xs:attribute name="max_latency" type="xs:int"/>
+ 	</xs:complexType>
+ </xs:element>
+ 
+<!-- in -->
+<xs:element name="in">
+	<xs:complexType>
+		<xs:sequence>
+	 		<xs:element ref="ni:hostImpl" minOccurs="1" maxOccurs="unbounded"/>
+	 		<xs:element ref="ni:performanceImpl" minOccurs="0" maxOccurs="unbounded"/>
+	 	</xs:sequence>
+	</xs:complexType>
+</xs:element>
+
+<!-- host -->
+<xs:element name="hostImpl">
+	<xs:complexType>
+		<xs:attribute name="hostName" type="ni:name" use="required"/>
+        <xs:attribute name="number_VNFs" type="xs:int" use="required"/>
+        <xs:attribute name="memory" type="xs:int" use="required"/>
+        <xs:attribute name="disk_storage" type="xs:int" use="required"/>
+	</xs:complexType>
+</xs:element>
+
+<!-- performance -->
+<xs:element name="performanceImpl">
+	<xs:complexType>
+		<xs:attribute name="avg_throughput" type="xs:float" use="required"/>
+        <xs:attribute name="latency" type="xs:float" use="required"/>
+        <xs:attribute name="sourceHost" type="ni:name" use="required"/>
+        <xs:attribute name="destinationHost" type="ni:name" use="required"/>
+	</xs:complexType>
+</xs:element>
+
+<!-- catalog -->
+<xs:element name="catalog">
+	<xs:complexType>
+		<xs:sequence>
+			<xs:element ref="ftypeImpl" minOccurs="1" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:element>
+
+<!-- FType -->
+<xs:element name="ftypeImpl">
+	<xs:complexType>
+        <xs:attribute name="functionaltypeId" type="ni:name" use="required"/>
+        <xs:attribute name="functionalTypeName" type="ni:NodeFunctionalType" use="required"/>
+        <xs:attribute name="required_memory" type="xs:int" use="required"/>
+        <xs:attribute name="required_storage" type="xs:int" use="required"/>
+    </xs:complexType>
+</xs:element>
+
+
+
+<!-- COLLECTIONS -->
+
+<!-- nffgs collection -->
+<xs:element name="nffgC">
+	<xs:complexType>
+		<xs:sequence>
+            <xs:element ref="ni:nffgImpl" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+	</xs:complexType>
+</xs:element>
+
+<!-- hosts collection -->
+<xs:element name="hostC">
+	<xs:complexType>
+		<xs:sequence>
+	 		<xs:element ref="ni:hostImpl" minOccurs="1" maxOccurs="unbounded"/>
+	 	</xs:sequence>
+	</xs:complexType>
+</xs:element>
+
+<!-- nodes collection -->
+<xs:element name="nodesC">
+	<xs:complexType>
+		<xs:sequence>
+            <xs:element ref="ni:nodeImpl" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+	</xs:complexType>
+</xs:element>
+
+<!-- links collection -->
+<xs:element name="linkC">
+	<xs:complexType>
+		<xs:sequence>
+            <xs:element ref="ni:linkImpl" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+	</xs:complexType>
+</xs:element>
+
+<!-- performances collection -->
+<xs:element name="performanceC">
+	<xs:complexType>
+		<xs:sequence>
+            <xs:element ref="ni:performanceImpl" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+	</xs:complexType>
+</xs:element>
+
+
+<!-- SIMPLE TYPES -->
+<xs:simpleType name="NodeFunctionalType">
+    <xs:restriction base="xs:string">
+        <xs:enumeration value="CACHE"/>
+        <xs:enumeration value="DPI"/>
+        <xs:enumeration value="FW"/>
+        <xs:enumeration value="MAIL_CLIENT"/>
+        <xs:enumeration value="MAIL_SERVER"/>
+        <xs:enumeration value="NAT"/>
+        <xs:enumeration value="SPAM"/>
+        <xs:enumeration value="VPN"/>
+        <xs:enumeration value="WEB_CLIENT"/>
+        <xs:enumeration value="WEB_SERVER"/>
+    </xs:restriction>
+</xs:simpleType>
+
+
+<xs:simpleType name="name">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="([A-Z]|[a-z])(\w)+"/>
+        </xs:restriction>
+</xs:simpleType>
+
+
+</xs:schema>
