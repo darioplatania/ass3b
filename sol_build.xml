@@ -17,9 +17,13 @@
 	<property name="target" value="1.8" />
 	<property name="source" value="1.8" />
 	
-	<path id="service.classpath">
-		<fileset dir="${ext.lib.dir}">
+	<path id="classpath">
+		<fileset dir="${lib.dir}">
 			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${ext.lib.dir}">
+		    <include name="*.jar" />
+			<exclude name="ant-*.jar"/>
 		</fileset>
 	</path>
 
@@ -57,19 +61,21 @@
 
 	<target name="build-service" depends="generate-artifacts">
 		<javac debug="on" fork="true" destdir="${build.dir}" srcdir="${src.dir}" includeantruntime="false" source="${source}" target="${target}">
-			<include name="${path.prefix}//**/*.java" />
+			<include name="${path.prefix}//**/*.java"/>
 			<classpath>
-				<path refid="service.classpath" />
+				<path refid="classpath" />
 			</classpath>
 		</javac>
 		<echo message=" --(3)--> Done" />
 	</target>
+	
+	
 
 	<target name="build-client">
 		<javac debug="on" fork="true" destdir="${build.dir}" srcdir="${src.dir}" includeantruntime="false" source="${source}" target="${target}">
 			<include name="${path.prefix}//**/*.java" />
 			<classpath>
-				<path refid="service.classpath" />
+				<path refid="classpath" />
 			</classpath>
 		</javac>
 		<echo message=" --(4)--> Done" />

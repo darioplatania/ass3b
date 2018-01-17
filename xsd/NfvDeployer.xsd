@@ -75,6 +75,11 @@
             <xs:selector xpath="ni:in/ni:performanceImpl"/>
             <xs:field xpath="@destinationHost"/>
         </xs:keyref>
+        
+        <xs:keyref name="nameReachable" refer="ni:host_id">
+            <xs:selector xpath="ni:nffgImpl/ni:nodeImpl/ni:hostReachable"/>
+            <xs:field xpath="@nameReachable"/>
+        </xs:keyref>
 
 </xs:element>
            
@@ -94,10 +99,12 @@
  <xs:element name="nodeImpl">
 	 <xs:complexType>
 		 <xs:sequence>
+		 	<xs:element ref="ni:hostReachable" minOccurs="0" maxOccurs="unbounded"/>
 		  	<xs:element ref="ni:linkImpl" minOccurs="0" maxOccurs="unbounded"/>
 		  </xs:sequence>
 	 	<xs:attribute name="node_name" type="ni:name" use="required"/>
-        <xs:attribute name="host_name" type="ni:name" use="required"/>
+        <xs:attribute name="host_name" type="ni:name" use="optional"/>
+        <xs:attribute name="nffg_rif" type="ni:name" use="required"/>
         <xs:attribute name="functionaltypeId" type="ni:name" use="required"/>
 	 </xs:complexType>
  </xs:element>
@@ -110,6 +117,12 @@
         <xs:attribute name="destinationNode" type="ni:name" use="required"/>
         <xs:attribute name="min_throughput" type="xs:float"/>
         <xs:attribute name="max_latency" type="xs:int"/>
+ 	</xs:complexType>
+ </xs:element>
+ 
+ <xs:element name="hostReachable">
+ 	<xs:complexType>
+ 		<xs:attribute name="nameReachable" type="ni:name" use="required"/>
  	</xs:complexType>
  </xs:element>
  

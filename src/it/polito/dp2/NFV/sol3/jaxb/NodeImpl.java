@@ -2,7 +2,7 @@
 // Questo file xe8 stato generato dall'architettura JavaTM per XML Binding (JAXB) Reference Implementation, v2.3.0-b170531.0717 
 // Vedere <a href="https://jaxb.java.net/">https://jaxb.java.net/</a> 
 // Qualsiasi modifica a questo file andrxe0 persa durante la ricompilazione dello schema di origine. 
-// Generato il: 2018.01.10 alle 04:11:37 PM CET 
+// Generato il: 2018.01.16 alle 06:03:14 PM CET 
 //
 
 
@@ -27,6 +27,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent&gt;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;sequence&gt;
+ *         &lt;element ref="{http://www.example.org/nfvInfo}hostReachable" maxOccurs="unbounded" minOccurs="0"/&gt;
  *         &lt;element ref="{http://www.example.org/nfvInfo}linkImpl" maxOccurs="unbounded" minOccurs="0"/&gt;
  *       &lt;/sequence&gt;
  *       &lt;attribute name="node_name" use="required" type="{http://www.example.org/nfvInfo}name" /&gt;
@@ -41,11 +42,13 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
+    "hostReachable",
     "linkImpl"
 })
 @XmlRootElement(name = "nodeImpl")
 public class NodeImpl {
 
+    protected List<HostReachable> hostReachable;
     protected List<LinkImpl> linkImpl;
     @XmlAttribute(name = "node_name", required = true)
     protected String nodeName;
@@ -53,6 +56,35 @@ public class NodeImpl {
     protected String hostName;
     @XmlAttribute(name = "functionaltypeId", required = true)
     protected String functionaltypeId;
+
+    /**
+     * Gets the value of the hostReachable property.
+     * 
+     * <p>
+     * This accessor method returns a reference to the live list,
+     * not a snapshot. Therefore any modification you make to the
+     * returned list will be present inside the JAXB object.
+     * This is why there is not a <CODE>set</CODE> method for the hostReachable property.
+     * 
+     * <p>
+     * For example, to add a new item, do as follows:
+     * <pre>
+     *    getHostReachable().add(newItem);
+     * </pre>
+     * 
+     * 
+     * <p>
+     * Objects of the following type(s) are allowed in the list
+     * {@link HostReachable }
+     * 
+     * 
+     */
+    public List<HostReachable> getHostReachable() {
+        if (hostReachable == null) {
+            hostReachable = new ArrayList<HostReachable>();
+        }
+        return this.hostReachable;
+    }
 
     /**
      * Gets the value of the linkImpl property.
