@@ -3,8 +3,6 @@ package it.polito.dp2.NFV.sol3.service;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-import javax.ws.rs.ForbiddenException;
-import javax.ws.rs.NotFoundException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
@@ -29,19 +27,20 @@ public class Neo4JDB {
 	private Catalog 	catalogimpl = new Catalog();
 	private String BaseURI;
 	private Client client;
+	private Response resp;
+	boolean bool = false;
+	//private NfvDeployer nfv;
 	//private final static String PROPERTY = "it.polito.dp2.NFV.lab2.URL";
 	private final static String PROPERTY ="it.polito.dp2.NFV.lab3.Neo4JSimpleXMLURL";
 	
-	private static   	Map<String, NodeImpl> Nodes   			 = new ConcurrentHashMap<>();
+	protected static   	Map<String, NodeImpl> Nodes   			 = new ConcurrentHashMap<>();
 	protected static		Map<String,NffgImpl> nffgs 				 = new ConcurrentHashMap<>();
 	private static 	    Map<String, Node> Neo4JNodes 		     = new ConcurrentHashMap<>();
 	private static  		Map<String, Node> Neo4JHost 		 		 = new ConcurrentHashMap<>();
-	private static	    Map<String,HostImpl> hostmap_appoggio 	 = new ConcurrentHashMap<>();
+	protected static	    Map<String,HostImpl> hostmap_appoggio 	 = new ConcurrentHashMap<>();
+	protected static	    Map<String,FtypeImpl> ftypemap_appoggio 	 = new ConcurrentHashMap<>();
 	private static	    Map<String,HostImpl> reach 	 			 = new ConcurrentHashMap<>();
-	
 
-	
-	
 	public Neo4JDB() {
      
      // create the basic URL as a String
@@ -56,17 +55,20 @@ public class Neo4JDB {
      /*Init Client*/
 	client = ClientBuilder.newClient();
 	}
-	
+
+public static Object getSynchObject(){
+	return nffgs;
+}
 	
 
-public void loadnffg(NffgImpl nffg) throws ServiceException, NfvReaderException {
+public boolean loadnffg(NffgImpl nffg) throws NfvReaderException, ServiceException {
 	
 	/*Correct Load*/
     //NffgMap.put(nffgReader.getName(), nffgReader);
 
 	/*Start isLoaded*/
-    boolean res_nffg = isLoaded(nffg.getNameNffg());
-    if(!res_nffg) {
+    //boolean res_nffg = isLoaded(nffg.getNameNffg());
+    //if(!res_nffg) {
     		//throw new NfvReaderException("Nffg Loaded Exception!");
 		
 		//CONTROL FUNCTION
@@ -93,7 +95,10 @@ public void loadnffg(NffgImpl nffg) throws ServiceException, NfvReaderException 
 	    }
 	   	
 	   	nffgs.put(nffg.getNameNffg(), nffg);
-    }
+	   	
+	   	return true;
+	   
+    //}
    	
 }
 
@@ -105,7 +110,7 @@ public void loadnffg(NffgImpl nffg) throws ServiceException, NfvReaderException 
  */
 
 
-private boolean NodePropertiesCreate(String nodeName) throws ServiceException {
+private boolean NodePropertiesCreate(String nodeName) throws ServiceException{
 	System.out.println("*** Init Node Properties Create ***");
 	
 	if(Neo4JNodes.get(nodeName)==null) {
@@ -160,7 +165,7 @@ private boolean NodePropertiesCreate(String nodeName) throws ServiceException {
 }
 
 
-private void NodeLinkRel(String srcNode, String destNode) throws ServiceException {
+private void NodeLinkRel(String srcNode, String destNode) throws ServiceException{
 	
 	System.out.println("*** Init Node Link Rel ***");
 	
@@ -169,7 +174,7 @@ private void NodeLinkRel(String srcNode, String destNode) throws ServiceExceptio
     rel.setDstNode(Neo4JNodes.get(destNode).getId());
 
      /*Post Relationship */
-    Response  resp = client.target(BaseURI+"/node/"+Neo4JNodes.get(srcNode).getId()+"/relationships").request(MediaType.APPLICATION_XML).post(Entity.entity(rel,MediaType.APPLICATION_XML),Response.class);
+     resp = client.target(BaseURI+"/node/"+Neo4JNodes.get(srcNode).getId()+"/relationships").request(MediaType.APPLICATION_XML).post(Entity.entity(rel,MediaType.APPLICATION_XML),Response.class);
 
     if ((resp.getStatus() != 200) && (resp.getStatus() != 201)) {
         throw new ServiceException("Error creating relationship");
@@ -177,7 +182,7 @@ private void NodeLinkRel(String srcNode, String destNode) throws ServiceExceptio
     System.out.println("*** End Node Link Rel ***");
 }
 
-private void HostPropertiesCreate(String hostName) throws ServiceException {
+private void HostPropertiesCreate(String hostName) throws ServiceException{
 	System.out.println("*** Init Host Properties Create ***");
 		
 		if(Neo4JHost.get(hostName) == null) {
@@ -222,7 +227,7 @@ private void HostPropertiesCreate(String hostName) throws ServiceException {
 
 }
 
-private void NodeHostRel(String srcNode, String destNode) throws ServiceException {
+private void NodeHostRel(String srcNode, String destNode) throws ServiceException{
 	
 	System.out.println("*** Init Node Host Relationship ***");
 
@@ -231,7 +236,7 @@ private void NodeHostRel(String srcNode, String destNode) throws ServiceExceptio
     rel.setDstNode(Neo4JHost.get(destNode).getId());
   
      /* Insert Relationship */
-    Response  resp = client.target(BaseURI+"/node/"+Neo4JNodes.get(srcNode).getId()+"/relationships").request(MediaType.APPLICATION_XML).post(Entity.entity(rel,MediaType.APPLICATION_XML),Response.class);
+     resp = client.target(BaseURI+"/node/"+Neo4JNodes.get(srcNode).getId()+"/relationships").request(MediaType.APPLICATION_XML).post(Entity.entity(rel,MediaType.APPLICATION_XML),Response.class);
 
     if ((resp.getStatus() != 200) && (resp.getStatus() != 201)) {
         throw new ServiceException("Error creating relationship");
@@ -239,13 +244,352 @@ private void NodeHostRel(String srcNode, String destNode) throws ServiceExceptio
     System.out.println("*** End Node Host Relationship ***");
 }
 
+
+
+
+/**
+ * @return the CurrentTime in XMLGregorianCalendar Format
+ */
+public XMLGregorianCalendar getCurrentTime(){
+	GregorianCalendar gregorianCalendar = new GregorianCalendar();
+	XMLGregorianCalendar xgc = null;
+	try {
+		xgc = DatatypeFactory.newInstance().newXMLGregorianCalendar(gregorianCalendar);
+	} catch (DatatypeConfigurationException e) {
+		e.printStackTrace();
+	}
+	return xgc;
+}
+
 /*
-* **********************
-* My Function Check
-* **********************
+public boolean isLoaded(String nffgName) throws NfvReaderException {
+	// TODO Auto-generated method stub
+	System.out.println("*** Init isLoaded ***");
+	
+	if(nffgs.get(nffgName) != null) {
+		System.out.println("Nffg già caricata");
+		return true;
+	}
+	else {
+		System.out.println("Nffg non caricata ---> Start");
+		return false;
+	}
+
+
+}
+*/
+
+/**
+ * @return a collection of Nffg saved in the service
+ */
+public Collection<NffgImpl> getNffgs() {
+	return nffgs.values();
+}
+
+/**
+ * @return a single Nffg saved in the service
+ */
+
+public NffgImpl getNffg(String name){
+	
+	NffgImpl retval = new NffgImpl();
+	
+	retval = nffgs.get(name);
+	
+	return retval;
+
+}
+
+
+/**
+ * @return a Nodes saved in the service
+ */
+
+public NodeImpl getNode(String name){
+	
+	NodeImpl retval = new NodeImpl();
+	
+	retval = Nodes.get(name);
+	
+	if(retval == null)
+		System.out.println("RETVAL NULL");
+	
+	return retval;
+
+}
+
+/**
+ * @return reachableHost
+ * @throws ServiceException 
+ */
+
+public Collection<HostImpl> getReachableHosts(String id) throws ServiceException{
+	
+	Node node = new Node();
+	HostImpl hostimpl = new HostImpl();	
+	String nome_nodo;
+	String nome_host;
+	
+	node = Neo4JNodes.get(id);
+	
+	Response resp = client.target(BaseURI+"/node/"+ node.getId() + "/reachableNodes?relationshipTypes=ForwardsTo&NodeLabel=Node").request(MediaType.APPLICATION_XML).get(Response.class);
+	
+	if(resp.getStatus()!= 200)
+		throw new ServiceException("getExtendedNodes Failed");
+
+	List<Node> list_node = resp.readEntity(new GenericType<List<Node>>(){});
+	
+	Iterator<Node> iterator = list_node.iterator();
+	
+	while(iterator.hasNext()) {
+		Node node1 = (Node)iterator.next();
+		nome_nodo = node1.getProperties().getProperty().get(0).getValue();
+		nome_host = Nodes.get(nome_nodo).getHostName();
+		
+		
+		hostimpl = hostmap_appoggio.get(nome_host);
+		reach.put(hostimpl.getHostName(), hostimpl);
+		
+		
+	}
+	
+		return reach.values();
+}
+
+/**
+ * 
+ * @throws NfvReaderException 
+ * @throws ServiceException 
+ * @addNode
+ */
+
+public boolean loadNode(NffgImpl nffg , NodeImpl node, String hostname) throws NfvReaderException, ServiceException {
+	
+	HostImpl host = hostmap_appoggio.get(hostname);
+	
+	if(!allocatedHost(host)) {
+		reloadNode(nffg,node);
+		
+		return true;
+	}
+
+	if(!allocatedHostMem(host)) {
+		reloadNode(nffg,node);
+		
+		return true;
+	}
+	
+	
+	if(!allocatedHostStorage(host)) {
+		reloadNode(nffg,node);
+		
+		return true;
+	}
+	else{
+	NodePropertiesCreate(node.getNodeName());
+	   NodeHostRel(node.getNodeName(), hostname);
+		if(!Nodes.containsKey(node.getNodeName())) {
+			node.setHostName(hostname);
+			Nodes.put(node.getNodeName(), node);
+		}
+		nffg.getNodeImpl().add(node);
+		nffgs.put(nffg.getNameNffg(), nffg);	
+	}
+	
+		   
+	return true;
+	
+}
+
+public String searchHost() throws NfvReaderException, ServiceException {
+	Random       random       = new Random();
+	List<String> keys         = new ArrayList<String>(Neo4JDB.hostmap_appoggio.keySet());
+	String       randomKey    = keys.get( random.nextInt(keys.size()) );
+	HostImpl     host         = Neo4JDB.hostmap_appoggio.get(randomKey);
+	
+	System.out.println("HOST CASUALE: " + host.getHostName());
+
+	return host.getHostName();
+}
+
+public void reloadNode(NffgImpl nffg, NodeImpl node) throws ServiceException {
+	
+	System.out.println("** Reload Node Start **");
+	
+	   for(Map.Entry<String, HostImpl> h : hostmap_appoggio.entrySet()) {
+		   if(!allocatedHost(h.getValue()))
+			   continue;
+		   if(!allocatedHostMem(h.getValue()))
+			   continue;
+		   if(!allocatedHostStorage(h.getValue()))
+			   continue;
+		 
+		   NodePropertiesCreate(node.getNodeName());
+		   NodeHostRel(node.getNodeName(), h.getValue().getHostName());
+			if(!Nodes.containsKey(node.getNodeName())) {
+				node.setHostName(h.getValue().getHostName());
+				Nodes.put(node.getNodeName(), node);
+			}
+			nffg.getNodeImpl().add(node);
+			nffgs.put(nffg.getNameNffg(), nffg);	
+			break;
+	   }
+}
+
+
+
+/*
+ * ******
+ * MAPPE
+ * ******
+ */
+public void map_passed(Map<String, HostImpl> hostmap) {
+	for(HostImpl host : hostmap.values()) {
+		hostmap_appoggio.put(host.getHostName(), host);
+		
+	}
+}
+
+public void map_ftype(Map<String, FtypeImpl> ftypemap) {
+	for(FtypeImpl ftype : ftypemap.values()) {
+		ftypemap_appoggio.put(ftype.getFunctionaltypeId(),ftype);
+		
+	}
+}
+
+
+
+/*
+* ********************************
+* My Function Check AllocatedHost
+* ********************************
+*/
+	
+
+public boolean allocatedHost(HostImpl host) {
+	
+System.out.println(" ** Init allocatedHost **");
+
+System.out.println(" **checkVNF **");
+int nodi_presenti = 1;
+	
+for(Map.Entry<String, NodeImpl> n : Nodes.entrySet()) {
+	if(n.getValue().getHostName().equals(host.getHostName())) {
+		System.out.println("DENTRO IF");
+		nodi_presenti += 1;
+		System.out.println("Numero Vnf nell'host: " + host.getNumberVNFs() + " numero vnf: " + nodi_presenti);   
+	}
+	else{
+		System.out.println("DENTRO ELSE");
+	    continue;
+	}	
+}
+
+if(nodi_presenti > host.getNumberVNFs()) {
+	System.out.println("Non puoi allocarlo qui..già pieno!");
+	return false;
+} 
+else{
+
+	System.out.println("Puoi allocarlo qui!!");
+	System.out.println(" **Init checkMemory **");
+	
+	return true;
+	//allocatedHostMem(host);
+	
+	}
+
+	
+}
+
+public boolean allocatedHostMem(HostImpl host) {
+
+int mem_nodi = 0;
+
+ for(Map.Entry<String, NodeImpl> n : Nodes.entrySet()) {
+   if(n.getValue().getHostName().equals(host.getHostName())) {
+	   System.out.println("DENTRO IF");
+	   String nodo_ftype_id = n.getValue().getFunctionaltypeId();
+	   
+	   
+   	   
+	   	if(ftypemap_appoggio.get(nodo_ftype_id)!=null) {
+	   		mem_nodi+=ftypemap_appoggio.get(nodo_ftype_id).getRequiredMemory();
+	   	    System.out.println("Memoria nell'host: " + host.getMemory() + " memoria vnf: " + mem_nodi);   
+	   	}
+	   	else
+	   		continue;
+	}
+    else {
+    		System.out.println("DENTRO ELSE");
+    		continue;
+    }
+  }
+  
+	if(host.getMemory()<mem_nodi) {
+		System.out.println("Non puoi allocarlo qui..memoeria piena!");
+		return false;
+	}
+	else{
+		System.out.println("Puoi allocarlo qui!!");
+	
+		System.out.println(" **Init checkStorage **");
+		//allocatedHostStorage(host);
+		return true;
+	
+	}		
+		
+}
+
+
+public boolean allocatedHostStorage(HostImpl host) {
+
+int storage_nodi = 0;
+
+ for(Map.Entry<String, NodeImpl> n : Nodes.entrySet()) {
+   if(n.getValue().getHostName().equals(host.getHostName())) {
+	   System.out.println("DENTRO IF");
+	   String nodo_ftype_id = n.getValue().getFunctionaltypeId();
+	   
+	   
+   	   
+	   	if(ftypemap_appoggio.get(nodo_ftype_id)!=null) {
+	   		storage_nodi+=ftypemap_appoggio.get(nodo_ftype_id).getRequiredStorage();
+	   	    System.out.println("Memoria nell'host: " + host.getDiskStorage() + " memoria vnf: " + storage_nodi);   
+	   	}
+	   	else
+	   		continue;
+	}
+    else {
+    		System.out.println("DENTRO ELSE");
+    		continue;
+    }
+  }
+  
+	if(host.getDiskStorage()<storage_nodi) {
+		System.out.println("Non puoi allocarlo qui..memoeria piena!");
+		return false;
+	}
+	else{
+		System.out.println("Puoi allocarlo qui!!");
+		return true;
+	
+	}		
+}
+	
+
+
+
+
+/*
+* *****************************
+* My Function Check Init Nffg
+* *****************************
 */
 	
 public void checkResource(NffgImpl nffgimpl) throws NfvReaderException {
+	
+	System.out.println("Init checkResource Host");
 	
 	int mem_compl_nodi;
 	int storage_compl;
@@ -323,140 +667,6 @@ public void checkResource(NffgImpl nffgimpl) throws NfvReaderException {
     }
 }
 
-
-/**
- * @return the CurrentTime in XMLGregorianCalendar Format
- */
-public XMLGregorianCalendar getCurrentTime(){
-	GregorianCalendar gregorianCalendar = new GregorianCalendar();
-	XMLGregorianCalendar xgc = null;
-	try {
-		xgc = DatatypeFactory.newInstance().newXMLGregorianCalendar(gregorianCalendar);
-	} catch (DatatypeConfigurationException e) {
-		e.printStackTrace();
-	}
-	return xgc;
-}
-
-public boolean isLoaded(String nffgName) throws NfvReaderException {
-	// TODO Auto-generated method stub
-	System.out.println("*** Init isLoaded ***");
-	
-	if(nffgs.get(nffgName) != null) {
-		System.out.println("Nffg già caricata");
-		return true;
-	}
-	else {
-		System.out.println("Nffg non caricata ---> Start");
-		return false;
-	}
-
-
-}
-
-/**
- * @return a collection of Nffg saved in the service
- */
-public Collection<NffgImpl> getNffgs() {
-	return nffgs.values();
-}
-
-/**
- * @return a single Nffg saved in the service
- */
-
-public NffgImpl getNffg(String name){
-	
-	NffgImpl retval = new NffgImpl();
-	
-	retval = nffgs.get(name);
-	
-	return retval;
-
-}
-
-
-/**
- * @return a Nodes saved in the service
- */
-
-public NodeImpl getNode(String name){
-	
-	NodeImpl retval = new NodeImpl();
-	
-	retval = Nodes.get(name);
-	
-	if(retval == null)
-		System.out.println("RETVAL NULL");
-	
-	return retval;
-
-}
-
-/**
- * @return reachableHost
- */
-
-public Collection<HostImpl> getReachableHosts(String id){
-	
-	Node node = new Node();
-	HostImpl hostimpl = new HostImpl();	
-	String nome_nodo;
-	String nome_host;
-	
-	node = Neo4JNodes.get(id);
-	
-	Response resp = client.target(BaseURI+"/node/"+ node.getId() + "/reachableNodes?relationshipTypes=ForwardsTo&NodeLabel=Node").request(MediaType.APPLICATION_XML).get(Response.class);
-	
-	//if(resp.getStatus()!= 200)
-		//throw new ServiceException("getExtendedNodes Failed");
-
-	List<Node> list_node = resp.readEntity(new GenericType<List<Node>>(){});
-	
-	Iterator<Node> iterator = list_node.iterator();
-	
-	while(iterator.hasNext()) {
-		Node node1 = (Node)iterator.next();
-		nome_nodo = node1.getProperties().getProperty().get(0).getValue();
-		nome_host = Nodes.get(nome_nodo).getHostName();
-		
-		
-		hostimpl = hostmap_appoggio.get(nome_host);
-		reach.put(hostimpl.getHostName(), hostimpl);
-		
-		
-	}
-	
-		return reach.values();
-}
-
-/**
- * 
- * @addNode
- */
-
-public void loadNode(NffgImpl nffg, NodeImpl node) {
-	
-	if(nffgs.get(nffg.getNameNffg()) ==null)
-		throw new NotFoundException(); // Nffg Not Present
-	
-	for(Map.Entry<String, NffgImpl> nffg_c : nffgs.entrySet()) {
-		
-	}
-		
-
-	
-	
-}
-
-	
-public void map_passed(Map<String, HostImpl> hostmap) {
-	for(HostImpl host : hostmap.values()) {
-		hostmap_appoggio.put(host.getHostName(), host);
-		
-	}
-}
-	
 	
 	
 	

@@ -1,6 +1,5 @@
 package it.polito.dp2.NFV.sol3.service;
 
-
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.xml.datatype.DatatypeConfigurationException;
@@ -40,9 +39,7 @@ public class NfvResources {
 	 * This method allows to get all NFFGS stored in the NffgService 
 	 * Some informations are stored into NffgService memory, others into Neo4JDB
 	 * @return  the List of Nffg stored in the service
-	 * @throw 	InternalServerErrorException
 	 */
-	
 	@GET
 	@Path("nffgs")
 	@ApiOperation(value = "Get the set of all nffgs", notes = "xml format")
@@ -58,6 +55,11 @@ public class NfvResources {
 
 	}
 	
+	/** 
+	 * This method allows to get NFFG by id stored in the NffgService 
+	 * Some informations are stored into NffgService memory, others into Neo4JDB
+	 * @return  the Nffg stored in the service
+	 */
 	@GET
 	@Path("nffgs/{id}")
 	@Produces(MediaType.APPLICATION_XML)
@@ -69,7 +71,7 @@ public class NfvResources {
 	})
 	public NffgImpl getNffg(@PathParam("id") String id){
 		
-		NffgImpl 	retval  = neo4j.getNffg(id);
+		NffgImpl retval  = neo4j.getNffg(id);
 		
 		if(retval == null)
 			throw new NotFoundException();
@@ -77,6 +79,10 @@ public class NfvResources {
 		
 	}
 	
+	/** 
+	 * This method allows to get node by id stored in the NffgService 
+	 * @return  the node stored in the service
+	 */
 	@GET
 	@Path("nodes/{id}")
 	@Produces(MediaType.APPLICATION_XML)
@@ -96,6 +102,11 @@ public class NfvResources {
 		
 	}
 	
+	/** 
+	 * This method allows to get reachablehosts by existed node stored in the NffgService 
+	 * @return  the reachablehosts stored in the service
+	 * @throws ServiceException 
+	 */
 	@GET
 	@Path("nodes/{id}/reachablehosts")
 	@ApiOperation(value = "Get the set of all hosts", notes = "xml format")
@@ -105,10 +116,20 @@ public class NfvResources {
 	})
     @Produces(MediaType.APPLICATION_XML)
 	public HostC getReachableHosts(@PathParam("id") String id){
+		try {
+			
+		NodeImpl node  = neo4j.getNode(id);
+		if(node == null)
+			throw new NotFoundException();
+			
 		HostC retval = new HostC(); 
 		retval.getHostImpl().addAll(neo4j.getReachableHosts(id));
-		
+	
 		return retval;
+		
+		}catch(ServiceException e) {
+			throw new InternalServerErrorException();
+		}
 
 	}
 	
@@ -118,9 +139,8 @@ public class NfvResources {
 	 * This method allows to add a whole NFFG 
 	 * @param the Nffg to store in the service
 	 * @throws NfvReaderException 
-	 * @throws ServiceException 
-	 * @throw ForbiddenException
-	 * @throw InternalServerErrorException
+	 * @throws InternalServerErrorException
+	 * @throws ForbiddenException
 	 */
 	@POST
 	@Path("addNffg")
@@ -131,27 +151,95 @@ public class NfvResources {
 			@ApiResponse(code = 403, message = "Forbidden"),
 			@ApiResponse(code = 500, message = "Internal Server Error")
 	})	
-	public void addNffg(NffgImpl nffg) throws ServiceException, NfvReaderException{
+	public void addNffg(NffgImpl nffg){
+		//serviceException & NfvReaderException le uso la prima nella create node e la seconda nei check dell'host
 		
-	        neo4j.loadnffg(nffg);   		
+		try{
+			synchronized(Neo4JDB.getSynchObject()) {
+				if (Neo4JDB.nffgs.containsKey(nffg.getNameNffg()))
+					throw new ForbiddenException();
+
+				if (!neo4j.loadnffg(nffg))
+					throw new InternalServerErrorException();
+			}
+			// neo4j.loadnffg(nffg);
+		}catch(NfvReaderException | ServiceException e){
+				throw new InternalServerErrorException();
+			
+		}	           		
 	}
 	
 	/**
-	 * @param Add Nodes
-	 * @return
+	 * This method allows to add a node in the NFFg
+	 * @param the Nffg and Node
+	 * @throws NfvReaderException 
+	 * @throws NotFoundException
+	 * @throws ForbiddenException
+	 * @throws InternalServerErrorException
+	 * 
 	 */
 	@POST
-	@Path("AddNode")
+	@Path("{id}/addNode")
 	@Consumes(MediaType.APPLICATION_XML)
+	@ApiOperation(value = "Add single Node", notes = "xml format")
 	@ApiResponses(value = {
-			@ApiResponse(code = 204, message = "No Content"),
+			@ApiResponse(code = 201, message = "Created"),
 			@ApiResponse(code = 403, message = "Forbidden"),
+			@ApiResponse(code = 404, message = "Not Found"),
 			@ApiResponse(code = 500, message = "Internal Server Error")
-	})	
-	public void loadNode(NffgImpl nffg, NodeImpl node) {
+	})
+	public void addNode(@PathParam("id") String id, NodeImpl node){
 		
-	       
-	}
+		try {
+
+			if (!Neo4JDB.nffgs.containsKey(id))
+				throw new NotFoundException("Nffg Not Found!"); // Nffg Not Found
+
+			if (Neo4JDB.Nodes.containsKey(node.getNodeName()))
+				throw new ForbiddenException(); // Node Present
+
+			/* vedo se nell'xml c'è l'host */
+			if (node.getHostName() != null) {
+				/* se c'è lo cerco nella mappa */
+				if (!Neo4JDB.hostmap_appoggio.containsKey(node.getHostName())) {
+					/*se nella mappa non esiste eccezzione*/
+					System.out.println("Host non presente nella mappa..eccezione!");
+						throw new NotFoundException(); //Host Not Found
+						
+				/*se nella mappa non esiste cerco un host e faccio la load
+					String host_casuale = neo4j.searchHost();
+					
+					NffgImpl nffg = Neo4JDB.nffgs.get(id);
+					if (!neo4j.loadNode(nffg,node,host_casuale))
+						throw new InternalServerErrorException();*/
+					
+				}
+				else {
+					System.out.println("Host presente nella mappa..alloco!");
+					NffgImpl nffg = Neo4JDB.nffgs.get(id);
+					if (!neo4j.loadNode(nffg,node,node.getHostName()))
+						throw new InternalServerErrorException();
+				}
+			}
+			//else lo metto in un host a piacere
+			else {
+				System.out.println("Non c'è host nell'xml lo scelgo casualmente");
+
+				String host_casuale = neo4j.searchHost();
+				
+				NffgImpl nffg = Neo4JDB.nffgs.get(id);
+				if (!neo4j.loadNode(nffg,node,host_casuale))
+					throw new InternalServerErrorException();
+			}
+
+
+		} catch (NfvReaderException | ServiceException e) {
+			throw new InternalServerErrorException();
+		}
+
+       
+}
+
 	
 	
 	

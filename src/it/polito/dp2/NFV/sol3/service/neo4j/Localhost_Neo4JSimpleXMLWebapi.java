@@ -18,7 +18,7 @@ import com.sun.jersey.api.uri.UriTemplate;
 
 @Generated(value = {
     "wadl|http://localhost:8080/Neo4JSimpleXML/webapi/application.wadl"
-}, comments = "wadl2java, http://wadl.java.net", date = "2018-01-16T18:03:16.271+01:00")
+}, comments = "wadl2java, http://wadl.java.net", date = "2018-01-18T17:30:19.985+01:00")
 public class Localhost_Neo4JSimpleXMLWebapi {
 
     /**
@@ -2363,12 +2363,12 @@ public class Localhost_Neo4JSimpleXMLWebapi {
             _templateAndMatrixParameterValues = new HashMap<String, Object>();
         }
 
-        public Localhost_Neo4JSimpleXMLWebapi.Root.SwaggerYaml swaggerYaml() {
-            return new Localhost_Neo4JSimpleXMLWebapi.Root.SwaggerYaml(_client, _uriBuilder.buildFromMap(_templateAndMatrixParameterValues));
-        }
-
         public Localhost_Neo4JSimpleXMLWebapi.Root.SwaggerJson swaggerJson() {
             return new Localhost_Neo4JSimpleXMLWebapi.Root.SwaggerJson(_client, _uriBuilder.buildFromMap(_templateAndMatrixParameterValues));
+        }
+
+        public Localhost_Neo4JSimpleXMLWebapi.Root.SwaggerYaml swaggerYaml() {
+            return new Localhost_Neo4JSimpleXMLWebapi.Root.SwaggerYaml(_client, _uriBuilder.buildFromMap(_templateAndMatrixParameterValues));
         }
 
         public static class SwaggerJson {

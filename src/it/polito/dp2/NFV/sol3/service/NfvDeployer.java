@@ -34,7 +34,7 @@ public class NfvDeployer {
 	protected Map<String,NffgImpl> nffgmap 			= new ConcurrentHashMap<>();
 	private   Map<String,PerformanceImpl> perfmap 	= new ConcurrentHashMap<>();
 	protected Map<String,HostImpl> hostmap 			= new ConcurrentHashMap<>();
-	private   Map<String,FtypeImpl> ftypemap 		= new ConcurrentHashMap<>();
+	protected   Map<String,FtypeImpl> ftypemap 		= new ConcurrentHashMap<>();
 	
 	//private   Map<String, NodeImpl> Nodes;
 	//private   Map<String, Node> Neo4JNodes;
@@ -195,7 +195,9 @@ private void serializerNffg(String nffg0) throws DatatypeConfigurationException,
 	if(nffgmap.get("Nffg0") != null)
 		System.out.println("Dimensione mappa nffg: " + nffgmap.size());
 	
-	neo4j.loadnffg(nffgimpl);
+	if(neo4j.loadnffg(nffgimpl))
+		System.out.println("loadnffg iniziale partita");
+	//neo4j.loadnffg(nffgimpl);
 	
 	System.out.println("** Finish Nffg Serializer **");
 }

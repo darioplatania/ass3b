@@ -2,7 +2,7 @@
 // Questo file xe8 stato generato dall'architettura JavaTM per XML Binding (JAXB) Reference Implementation, v2.3.0-b170531.0717 
 // Vedere <a href="https://jaxb.java.net/">https://jaxb.java.net/</a> 
 // Qualsiasi modifica a questo file andrxe0 persa durante la ricompilazione dello schema di origine. 
-// Generato il: 2018.01.16 alle 06:03:14 PM CET 
+// Generato il: 2018.01.18 alle 05:30:18 PM CET 
 //
 
 
@@ -31,7 +31,8 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element ref="{http://www.example.org/nfvInfo}linkImpl" maxOccurs="unbounded" minOccurs="0"/&gt;
  *       &lt;/sequence&gt;
  *       &lt;attribute name="node_name" use="required" type="{http://www.example.org/nfvInfo}name" /&gt;
- *       &lt;attribute name="host_name" use="required" type="{http://www.example.org/nfvInfo}name" /&gt;
+ *       &lt;attribute name="host_name" type="{http://www.example.org/nfvInfo}name" /&gt;
+ *       &lt;attribute name="nffg_rif" use="required" type="{http://www.example.org/nfvInfo}name" /&gt;
  *       &lt;attribute name="functionaltypeId" use="required" type="{http://www.example.org/nfvInfo}name" /&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -52,8 +53,10 @@ public class NodeImpl {
     protected List<LinkImpl> linkImpl;
     @XmlAttribute(name = "node_name", required = true)
     protected String nodeName;
-    @XmlAttribute(name = "host_name", required = true)
+    @XmlAttribute(name = "host_name")
     protected String hostName;
+    @XmlAttribute(name = "nffg_rif", required = true)
+    protected String nffgRif;
     @XmlAttribute(name = "functionaltypeId", required = true)
     protected String functionaltypeId;
 
@@ -161,6 +164,30 @@ public class NodeImpl {
      */
     public void setHostName(String value) {
         this.hostName = value;
+    }
+
+    /**
+     * Recupera il valore della proprietxE0 nffgRif.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getNffgRif() {
+        return nffgRif;
+    }
+
+    /**
+     * Imposta il valore della proprietxE0 nffgRif.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setNffgRif(String value) {
+        this.nffgRif = value;
     }
 
     /**
