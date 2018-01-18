@@ -117,6 +117,7 @@
         <xs:attribute name="destinationNode" type="ni:name" use="required"/>
         <xs:attribute name="min_throughput" type="xs:float"/>
         <xs:attribute name="max_latency" type="xs:int"/>
+        <xs:attribute name="overwrite" type="xs:boolean" use="required"/>
  	</xs:complexType>
  </xs:element>
  

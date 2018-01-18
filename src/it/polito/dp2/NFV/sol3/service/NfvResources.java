@@ -6,6 +6,8 @@ import javax.xml.datatype.DatatypeConfigurationException;
 
 import io.swagger.annotations.*;
 import it.polito.dp2.NFV.NfvReaderException;
+import it.polito.dp2.NFV.lab3.LinkAlreadyPresentException;
+import it.polito.dp2.NFV.lab3.NoNodeException;
 import it.polito.dp2.NFV.lab3.ServiceException;
 import it.polito.dp2.NFV.sol3.jaxb.*;
 
@@ -239,6 +241,76 @@ public class NfvResources {
 
        
 }
+	
+	/**
+	 * This method allows to add a link in the NFFg
+	 * @param the Nffg and Node
+	 * @throws LinkAlreadyPresentException 
+	 * @throws NfvReaderException 
+	 * @throws NotFoundException
+	 * @throws ForbiddenException
+	 * @throws InternalServerErrorException
+	 * 
+	 */
+	@POST
+	@Path("{id}/addLink")
+	@Consumes(MediaType.APPLICATION_XML)
+	@ApiOperation(value = "Add single Node", notes = "xml format")
+	@ApiResponses(value = {
+			@ApiResponse(code = 201, message = "Created"),
+			@ApiResponse(code = 403, message = "Forbidden"),
+			@ApiResponse(code = 404, message = "Not Found"),
+			@ApiResponse(code = 500, message = "Internal Server Error")
+	})
+	public void addLink(@PathParam("id") String id, LinkImpl link){
+	try {
+
+		if (!Neo4JDB.nffgs.containsKey(id))
+			throw new NotFoundException("Nffg Not Found!"); // Nffg Not Found
+		
+		if(link.getLinkName() == null)
+			throw new InternalServerErrorException();
+		if(link.getSourceNode() == null)
+			throw new InternalServerErrorException();
+		if(link.getDestinationNode() == null)
+			throw new InternalServerErrorException();	
+		
+		if (!Neo4JDB.Nodes.containsKey(link.getSourceNode()))
+			throw new NoNodeException(); // SourceNode not Found
+		
+		if (!Neo4JDB.Nodes.containsKey(link.getDestinationNode()))
+			throw new NoNodeException(); // DestionationNode not Found
+		
+		NffgImpl nffg = Neo4JDB.nffgs.get(id);
+			
+		//cerco i link, se esiste vado a vedere il flag se è true o false (true aggiorno il link, false exception)
+		if(neo4j.checkLink(id,link)) {
+			System.out.println("Controllo il flag");
+			
+			if(!link.isOverwrite()) {
+				//flag false quindi eccezione
+				System.out.println("Flag false---eccezione");
+				throw new LinkAlreadyPresentException();	
+			}
+			else {
+		    System.out.println("Flag true");
+			//aggiorno link da implmentare
+			neo4j.upLink(nffg,link);
+			//neo4j.loadLink(nffg, link);
+			}
+			
+		}
+		//se non esiste lo carico
+		else {
+			System.out.println("Nodo non esiste--lo carico");
+			neo4j.loadLink(nffg,link);			
+		}
+	}
+	catch(ServiceException | LinkAlreadyPresentException | NoNodeException e) {
+		throw new InternalServerErrorException();	
+	}
+		
+	}
 
 	
 	

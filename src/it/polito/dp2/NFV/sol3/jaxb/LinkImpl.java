@@ -2,7 +2,7 @@
 // Questo file xe8 stato generato dall'architettura JavaTM per XML Binding (JAXB) Reference Implementation, v2.3.0-b170531.0717 
 // Vedere <a href="https://jaxb.java.net/">https://jaxb.java.net/</a> 
 // Qualsiasi modifica a questo file andrxe0 persa durante la ricompilazione dello schema di origine. 
-// Generato il: 2018.01.18 alle 05:30:18 PM CET 
+// Generato il: 2018.01.19 alle 12:26:22 AM CET 
 //
 
 
@@ -29,6 +29,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;attribute name="destinationNode" use="required" type="{http://www.example.org/nfvInfo}name" /&gt;
  *       &lt;attribute name="min_throughput" type="{http://www.w3.org/2001/XMLSchema}float" /&gt;
  *       &lt;attribute name="max_latency" type="{http://www.w3.org/2001/XMLSchema}int" /&gt;
+ *       &lt;attribute name="overwrite" use="required" type="{http://www.w3.org/2001/XMLSchema}boolean" /&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
@@ -51,6 +52,8 @@ public class LinkImpl {
     protected Float minThroughput;
     @XmlAttribute(name = "max_latency")
     protected Integer maxLatency;
+    @XmlAttribute(name = "overwrite", required = true)
+    protected boolean overwrite;
 
     /**
      * Recupera il valore della proprietxE0 linkName.
@@ -170,6 +173,22 @@ public class LinkImpl {
      */
     public void setMaxLatency(Integer value) {
         this.maxLatency = value;
+    }
+
+    /**
+     * Recupera il valore della proprietxE0 overwrite.
+     * 
+     */
+    public boolean isOverwrite() {
+        return overwrite;
+    }
+
+    /**
+     * Imposta il valore della proprietxE0 overwrite.
+     * 
+     */
+    public void setOverwrite(boolean value) {
+        this.overwrite = value;
     }
 
 }

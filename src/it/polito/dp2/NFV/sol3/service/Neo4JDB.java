@@ -436,6 +436,80 @@ public void reloadNode(NffgImpl nffg, NodeImpl node) throws ServiceException {
 	   }
 }
 
+public boolean checkLink(String nffgname,LinkImpl link) throws ServiceException{
+	
+	System.out.println("** Init checkLink **");
+	
+	//false return non esite, true return esiste
+	
+	NffgImpl nffg_link = nffgs.get(nffgname);
+	
+	for(NodeImpl n : nffg_link.getNodeImpl()) {
+		for(LinkImpl l : n.getLinkImpl()) {	
+			if(l.getLinkName().equals(link.getLinkName())) {
+				System.out.println("Il Link : " + link.getLinkName() + " esiste nel nodo: " + n.getNodeName());
+				return true;	
+			}
+			//n.getLinkImpl().add(link);
+		}
+	}
+	return false;
+}
+
+public void loadLink(NffgImpl nffg, LinkImpl link) throws ServiceException {
+	
+	System.out.println("** Init loadLink **");
+	
+	NodeLinkRel(link.getSourceNode(),link.getDestinationNode());
+	
+	NffgImpl nffg_link = nffgs.get(nffg.getNameNffg());
+	
+	for(NodeImpl n : nffg_link.getNodeImpl()) {
+		if(n.getNodeName().equals(link.getSourceNode())) {
+			n.getLinkImpl().add(link);
+		}
+	}
+
+}
+
+public void upLink(NffgImpl nffg,LinkImpl link) {
+	
+	System.out.println("** Init upLink **");
+	
+	NffgImpl nffg_link = nffgs.get(nffg.getNameNffg());
+	
+	
+	
+	
+	for(NodeImpl n : nffg_link.getNodeImpl()) {
+		if(n.getNodeName().equals(link.getSourceNode())) {
+			for(int i = 0; i<n.getLinkImpl().size();i++) {
+				if(n.getLinkImpl().get(i).getLinkName().equals(link.getLinkName())) {
+					n.getLinkImpl().get(i).setLinkName(link.getLinkName());
+					n.getLinkImpl().get(i).setSourceNode(n.getLinkImpl().get(i).getSourceNode());
+					n.getLinkImpl().get(i).setDestinationNode(n.getLinkImpl().get(i).getDestinationNode());
+					n.getLinkImpl().get(i).setMaxLatency(link.getMaxLatency());
+					n.getLinkImpl().get(i).setMinThroughput(link.getMinThroughput());
+					n.getLinkImpl().get(i).setOverwrite(false);
+					n.getLinkImpl().set(i, n.getLinkImpl().get(i));
+				}
+
+			}
+		}
+	}
+	
+	
+	
+	
+	/*NffgImpl nffg_link = nffgs.get(nffg.getNameNffg());
+	
+	for(NodeImpl n : nffg_link.getNodeImpl()) {
+		if(n.getNodeName().equals(link.getSourceNode())) {
+			n.getLinkImpl().remove(link);
+		}
+	}*/
+}
+
 
 
 /*
