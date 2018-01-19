@@ -1,92 +1,107 @@
-/*package it.polito.dp2.NFV.sol3.client2;
+package it.polito.dp2.NFV.sol3.client2;
 
 import it.polito.dp2.NFV.*;
-import javax.xml.bind.*;
-import javax.xml.validation.*;
-import java.io.*;
+
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.core.MediaType;
 import java.util.*;
 import it.polito.dp2.NFV.sol3.jaxb.*;
-import org.xml.sax.SAXException;
 
-import static javax.xml.XMLConstants.W3C_XML_SCHEMA_NS_URI;
 
 public class NfvReaderImpl implements NfvReader {
 	
 	private Np np = null;
 	
-	
+	/*
 	 * MyList
 	 * 
-	    
+	 */   
     private HashMap<String, NffgReaderImpl> nffgs = new HashMap<>();
     private HashMap<String, HostReaderImpl> host_list = new HashMap<>();
     private HashMap<String, VNFTypeReaderImpl> vnf_list = new HashMap<>();
     private HashMap<String, ConnectionPerformanceReaderImpl> cpr_list = new HashMap<>();
     private HashMap<String, NffgReaderImpl> nffg_cp = new HashMap<>();
 	
-	
-	private static final String XSD_FOLDER = "xsd/";
-    private static final String XSD_FILE = "nfvInfo.xsd";
-    private static final String PACKAGE = "it.polito.dp2.NFV.sol1.jaxb";
     
     private int mem_compl_nodi;
     private int storage_compl;
     private int vnf_compl;
     
+    private String BaseURI;
+	private Client client;
+	//private NfvDeployer nfv;
+	//private final static String PROPERTY = "it.polito.dp2.NFV.lab2.URL";
+	private final static String PROPERTY ="it.polito.dp2.NFV.lab3.URL";
+    
     
 	public NfvReaderImpl() throws NfvReaderException {
 		
+		 // create the basic URL as a String
+		BaseURI = System.getProperty(PROPERTY);
+
+	     if (BaseURI == null)
+	         BaseURI = "http://localhost:8080/NfvDeployer/rest/";
+	  
+
+
+	     /*Init Client*/
+		client = ClientBuilder.newClient();
 		
 		
+		/*Get collections*/
+		NffgC nffgC = client.target(BaseURI+"/np/nffgs").request(MediaType.APPLICATION_XML).get(NffgC.class);
+		HostC hostC = client.target(BaseURI+"/np/hosts").request(MediaType.APPLICATION_XML).get(HostC.class);
+		Catalog catalogC = client.target(BaseURI+"/np/catalog").request(MediaType.APPLICATION_XML).get(Catalog.class);
+		PerformanceC performanceC = client.target(BaseURI+"/np/performances").request(MediaType.APPLICATION_XML).get(PerformanceC.class);
 		
-		List<NffgType> nffgTypes = this.np.getNffg();
 					
-		if(nffgTypes.isEmpty())
+		if(nffgC == null)
 			throw new NfvReaderException("No Nffgs are present");
 		
-		
+		/*
 		 * Create Hosts List
 		 *
-		 	
-		for(HostType host : this.np.getIn().getHost()) {
+		 */
+		for(HostImpl host : hostC.getHostImpl()) {
 			HostReaderImpl hri = new HostReaderImpl(host);
 			host_list.put(host.getHostName(), hri);
 		}
-		if(host_list.isEmpty())
-			throw new NfvReaderException("Host List is empty!");
+		//if(host_list.isEmpty())
+			//throw new NfvReaderException("Host List is empty!");
 	
 		
-		
+		/*
 		 * Create VNFs List
 		 * 
-		 
-		for(FType ft : this.np.getCatalog().getFunctionaltype()) {
+		 */
+		for(FtypeImpl ft : catalogC.getFtypeImpl()) {
 			VNFTypeReaderImpl myvnf = new VNFTypeReaderImpl(ft);
 			vnf_list.put(ft.getFunctionaltypeId(),myvnf);
 		}
-		if(vnf_list.isEmpty())
-			throw new NfvReaderException("VNF List is empty!");
+		//if(vnf_list.isEmpty())
+			//throw new NfvReaderException("VNF List is empty!");
 		
 		
-		
+		/*
 		 *NF-FG/NODES/LINK 
 		 * 
-		 
-		for(NffgType nffgType:nffgTypes){
+		 */
+		for(NffgImpl nffgType:nffgC.getNffgImpl()){
 			
 			NffgReaderImpl nffgImpl = new NffgReaderImpl(nffgType.getNameNffg(),nffgType.getDeployTime().toGregorianCalendar());
 			ArrayList<NodeReaderImpl> nodes = new ArrayList<NodeReaderImpl>();
 			
 			
-			for(NodeType n:nffgType.getNode()){
+			for(NodeImpl n:nffgType.getNodeImpl()){
 				HostReaderImpl host_reader = cercaHost(n);
             		VNFTypeReaderImpl vnfri = cercaVnf(n);
             		
             		NodeReaderImpl newNode = new NodeReaderImpl(n.getNodeName(),host_reader,nffgImpl,vnfri);			
 				
-				if(!n.getLink().isEmpty()){
+				if(!n.getLinkImpl().isEmpty()){
 					
-					for(LinkType l: n.getLink()){
+					for(LinkImpl l: n.getLinkImpl()){
 						if(l.getSourceNode()!=l.getDestinationNode()) {
 							NodeReaderImpl dstnode = cercaNodo(l.getDestinationNode(),nffgType,nffgImpl);
 							if(dstnode == null)
@@ -99,10 +114,10 @@ public class NfvReaderImpl implements NfvReader {
 							throw new NfvReaderException("Link Incorrect!");
 					}
 					
-					 Vado a vedere se ci sono link che puntano a un destNode col mio stesso Id, ossia
+					/* Vado a vedere se ci sono link che puntano a un destNode col mio stesso Id, ossia
 					 * se esistono link che puntano a me che sono in uno stato incosistente.
 					 * In tal caso vado ad aggiornare tale link.
-					 
+					 */
 					
 					for(int i=0;i<nodes.size();i++){						
 						NodeReaderImpl tmp = nodes.get(i);
@@ -117,21 +132,21 @@ public class NfvReaderImpl implements NfvReader {
 					}										
 				}
 				
-				
+				/*
 				 * Add this node into set of nodes
-				 							
+				 */							
 				nodes.add(newNode);
 				
-				
+				/*
 				 * Add this node into NF-FG
-				 	
+				 */	
 				nffgImpl.addNode(newNode);				
 			}
 
-			
+			/*
 			 * Control Method
 			 * 
-			 
+			 */
 			
 			//Check Memory
 			System.out.println("**********CHECK MEM **********");
@@ -227,13 +242,13 @@ public class NfvReaderImpl implements NfvReader {
 			       }		
 			}
 
-			
+			/*
 			 * Add NF-FG into set of NetworkProvider NF-FG 
-			 	
+			 */	
 			this.nffgs.put(nffgType.getNameNffg(),nffgImpl);			
 		}
 		
-		
+		/*
 		 * Host
 		 * 
 		 	
@@ -246,93 +261,31 @@ public class NfvReaderImpl implements NfvReader {
 				}
 			}
 		}
-
+		*/
 		
-		 * Performance
-		 * 
+		 /*
+		  *  Performance
+		  */
 		 			
-		for(PerformanceType pf : this.np.getIn().getPerformance()) {		
+		for(PerformanceImpl pf : performanceC.getPerformanceImpl()) {		
 			ConnectionPerformanceReaderImpl cpri = new ConnectionPerformanceReaderImpl(pf);
 			String var = pf.getSourceHost() + "-" + pf.getDestinationHost();
 			cpr_list.put(var,cpri);			
 		}		            
 	}
 
-	@Override
-	public ConnectionPerformanceReader getConnectionPerformance(HostReader arg0, HostReader arg1)  {
-		
-		String var = arg0.getName() + "-" + arg1.getName();	
-		return this.cpr_list.get(var);
-			
-	}
-
-	@Override
-	public HostReader getHost(String arg0) {
-		for(Map.Entry<String, HostReaderImpl> hr : host_list.entrySet()){
-			if(hr.getValue().getName().equals(arg0))
-				return (HostReader) hr;
-		}
-		return null;
-	}
-
-	@Override
-	public Set<HostReader> getHosts() {
-		return new LinkedHashSet<HostReader>(this.host_list.values());
-	}
-
-	@Override
-	public NffgReader getNffg(String arg0) {
-		for(Map.Entry<String, NffgReaderImpl> nffgr:this.nffgs.entrySet()){
-			if(nffgr.getValue().getName().equals(arg0))
-				return (NffgReader) nffgr;
-		}
-		return null;
-	}
-
-	@Override
-	public Set<NffgReader> getNffgs(Calendar arg0) {
-		if(arg0 == null)
-			return new LinkedHashSet<NffgReader>(this.nffgs.values());
-		else {
-			for(Map.Entry<String, NffgReaderImpl> nffgr:this.nffgs.entrySet()) {
-				if(nffgr.getValue().getDeployTime().after(arg0))
-					this.nffg_cp.put(nffgr.getValue().getName(), (NffgReaderImpl) nffgr);
-			}
-			return new LinkedHashSet<NffgReader>(this.nffg_cp.values());
-		}			
-	}
-
-	@Override
-	public Set<VNFTypeReader> getVNFCatalog() {
-		return new LinkedHashSet<VNFTypeReader>(this.vnf_list.values());
-	}
 	
-	 private NetworkProvider unmarshallDocument(File inputFile) throws JAXBException, SAXException, IllegalArgumentException {
-	        JAXBContext myJAXBContext = JAXBContext.newInstance(PACKAGE);
-
-	        SchemaFactory mySchemaFactory;
-	        Schema mySchema;
-
-			
-	         * - creating the XML schema to validate the XML file before read it -
-			 
-	        mySchemaFactory = SchemaFactory.newInstance(W3C_XML_SCHEMA_NS_URI);
-	        mySchema = mySchemaFactory.newSchema(new File(XSD_FOLDER + XSD_FILE));
-
-	        Unmarshaller myUnmarshaller = myJAXBContext.createUnmarshaller();
-	        myUnmarshaller.setSchema(mySchema);
-
-	        return (NetworkProvider) myUnmarshaller.unmarshal(inputFile);
-	    }
-	 
-	 METHOD
+	
 	 
 	 
+	 /*METHOD*/
+	 
+	 /*
 	  *Search Node Method
 	  * 
-	  	 
-	 private NodeReaderImpl cercaNodo(String node, NffgType nffg, NffgReaderImpl nffgri) {
-	        for (NodeType nodeType : nffg.getNode()) {
+	  */	 
+	 private NodeReaderImpl cercaNodo(String node, NffgImpl nffg, NffgReaderImpl nffgri) {
+	        for (NodeImpl nodeType : nffg.getNodeImpl()) {
 	            if (nodeType.getNodeName().equals(node)) {
 	            	HostReaderImpl hr = cercaHost(nodeType);
 	            	VNFTypeReaderImpl vnf = cercaVnf(nodeType);
@@ -342,11 +295,11 @@ public class NfvReaderImpl implements NfvReader {
 	        return null;
 	    }
 	 
-	 
+	 /*
 	  *Search Host Method
 	  * 
-	  	 
-	 private HostReaderImpl cercaHost(NodeType node) {
+	  */	 
+	 private HostReaderImpl cercaHost(NodeImpl node) {
 		 for(Map.Entry<String, HostReaderImpl> host : host_list.entrySet()  ) {
 			 if(node.getHostName().equals(host.getValue().getName())) {
 				 return host.getValue();
@@ -355,17 +308,94 @@ public class NfvReaderImpl implements NfvReader {
 		 return null;		 
 	 }
 	 
-	 
+	 /*
 	  *Search VNF Method
 	  * 
-	  	 
-	 private VNFTypeReaderImpl cercaVnf( NodeType node) {
+	  */	 
+	 private VNFTypeReaderImpl cercaVnf( NodeImpl node) {
 		 for(Map.Entry<String, VNFTypeReaderImpl> vnf : vnf_list.entrySet()) {			 		 
 			 if(vnf.getValue().getName().equals(node.getFunctionaltypeId())) {
 				 return vnf.getValue();
 			 }
 		 }
 		 return null;
-	 }		 
+	 }
+
+
+
+
+
+	@Override
+	public ConnectionPerformanceReader getConnectionPerformance(HostReader arg0, HostReader arg1) {
+		// TODO Auto-generated method stub
+		String var = arg0.getName() + "-" + arg1.getName();	
+		return this.cpr_list.get(var);
+	}
+
+
+
+
+
+	@Override
+	public HostReader getHost(String arg0) {
+		// TODO Auto-generated method stub
+		for(Map.Entry<String, HostReaderImpl> hr : host_list.entrySet()){
+			if(hr.getValue().getName().equals(arg0))
+				return (HostReader) hr;
+		}
+		return null;
+	}
+
+
+
+
+
+	@Override
+	public Set<HostReader> getHosts() {
+		// TODO Auto-generated method stub
+		return new LinkedHashSet<HostReader>(this.host_list.values());
+	}
+
+
+
+
+
+	@Override
+	public NffgReader getNffg(String arg0) {
+		// TODO Auto-generated method stub
+		for(Map.Entry<String, NffgReaderImpl> nffgr:this.nffgs.entrySet()){
+			if(nffgr.getValue().getName().equals(arg0))
+				return (NffgReader) nffgr;
+		}
+		return null;
+	}
+	
+
+
+
+
+
+	@Override
+	public Set<NffgReader> getNffgs(Calendar arg0) {
+		// TODO Auto-generated method stub
+		if(arg0 == null)
+			return new LinkedHashSet<NffgReader>(this.nffgs.values());
+		else {
+			for(Map.Entry<String, NffgReaderImpl> nffgr:this.nffgs.entrySet()) {
+				if(nffgr.getValue().getDeployTime().after(arg0))
+					this.nffg_cp.put(nffgr.getValue().getName(), (NffgReaderImpl) nffgr);
+			}
+			return new LinkedHashSet<NffgReader>(this.nffg_cp.values());
+		}		
+	}
+
+
+
+
+
+	@Override
+	public Set<VNFTypeReader> getVNFCatalog() {
+		// TODO Auto-generated method stub
+		return new LinkedHashSet<VNFTypeReader>(this.vnf_list.values());
+	}		 
 }
-*/

@@ -28,7 +28,7 @@ public class Neo4JDB {
 	private String BaseURI;
 	private Client client;
 	private Response resp;
-	boolean bool = false;
+	
 	//private NfvDeployer nfv;
 	//private final static String PROPERTY = "it.polito.dp2.NFV.lab2.URL";
 	private final static String PROPERTY ="it.polito.dp2.NFV.lab3.Neo4JSimpleXMLURL";
