@@ -33,13 +33,14 @@ public class Neo4JDB {
 	//private final static String PROPERTY = "it.polito.dp2.NFV.lab2.URL";
 	private final static String PROPERTY ="it.polito.dp2.NFV.lab3.Neo4JSimpleXMLURL";
 	
-	protected static   	Map<String, NodeImpl> Nodes   			 = new ConcurrentHashMap<>();
-	protected static		Map<String,NffgImpl> nffgs 				 = new ConcurrentHashMap<>();
-	private static 	    Map<String, Node> Neo4JNodes 		     = new ConcurrentHashMap<>();
-	private static  		Map<String, Node> Neo4JHost 		 		 = new ConcurrentHashMap<>();
-	protected static	    Map<String,HostImpl> hostmap_appoggio 	 = new ConcurrentHashMap<>();
-	protected static	    Map<String,FtypeImpl> ftypemap_appoggio 	 = new ConcurrentHashMap<>();
-	private static	    Map<String,HostImpl> reach 	 			 = new ConcurrentHashMap<>();
+	protected static   	Map<String, NodeImpl> Nodes   			     = new ConcurrentHashMap<>();
+	protected static		Map<String,NffgImpl> nffgs 				     = new ConcurrentHashMap<>();
+	private static 	    Map<String, Node> Neo4JNodes 		         = new ConcurrentHashMap<>();
+	private static  		Map<String, Node> Neo4JHost 		 		     = new ConcurrentHashMap<>();
+	protected static	    Map<String,HostImpl> hostmap_appoggio 	     = new ConcurrentHashMap<>();
+	protected static	    Map<String,FtypeImpl> ftypemap_appoggio 	     = new ConcurrentHashMap<>();
+	protected static	    Map<String,PerformanceImpl> perfmap_appoggio 	 = new ConcurrentHashMap<>();
+	private static	    Map<String,HostImpl> reach 	 			     = new ConcurrentHashMap<>();
 
 	public Neo4JDB() {
      
@@ -319,6 +320,29 @@ public NodeImpl getNode(String name){
 }
 
 /**
+ * @return a collection of Hosts saved in the service
+ */
+public Collection<HostImpl> getHosts() {
+	return hostmap_appoggio.values();
+}
+
+
+/**
+ * @return a Catalog saved in the service
+ */
+public Collection<FtypeImpl> getCatalog() {
+	return ftypemap_appoggio.values();
+}
+
+/**
+ * @return a Performance saved in the service
+ */
+public Collection<PerformanceImpl> getPerformance() {
+	return perfmap_appoggio.values();
+}
+
+
+/**
  * @return reachableHost
  * @throws ServiceException 
  */
@@ -523,7 +547,7 @@ public void upLink(NffgImpl nffg,LinkImpl link) {
  * MAPPE
  * ******
  */
-public void map_passed(Map<String, HostImpl> hostmap) {
+public void map_host(Map<String, HostImpl> hostmap) {
 	for(HostImpl host : hostmap.values()) {
 		hostmap_appoggio.put(host.getHostName(), host);
 		
@@ -533,6 +557,14 @@ public void map_passed(Map<String, HostImpl> hostmap) {
 public void map_ftype(Map<String, FtypeImpl> ftypemap) {
 	for(FtypeImpl ftype : ftypemap.values()) {
 		ftypemap_appoggio.put(ftype.getFunctionaltypeId(),ftype);
+		
+	}
+}
+
+public void map_performance(Map<String, PerformanceImpl> perfmap) {
+	for(PerformanceImpl perf : perfmap.values()) {
+		String var = perf.getSourceHost() + "-" + perf.getDestinationHost();
+		perfmap_appoggio.put(var, perf);
 		
 	}
 }

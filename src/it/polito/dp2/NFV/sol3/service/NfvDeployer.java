@@ -31,10 +31,10 @@ public class NfvDeployer {
 	private NfvReader monitor;
 	private Neo4JDB neo4j;
 	
-	protected Map<String,NffgImpl> nffgmap 			= new ConcurrentHashMap<>();
-	private   Map<String,PerformanceImpl> perfmap 	= new ConcurrentHashMap<>();
-	protected Map<String,HostImpl> hostmap 			= new ConcurrentHashMap<>();
-	protected   Map<String,FtypeImpl> ftypemap 		= new ConcurrentHashMap<>();
+	protected   Map<String,NffgImpl> nffgmap 			= new ConcurrentHashMap<>();
+	protected   Map<String,PerformanceImpl> perfmap 	    = new ConcurrentHashMap<>();
+	protected   Map<String,HostImpl> hostmap 			= new ConcurrentHashMap<>();
+	protected   Map<String,FtypeImpl> ftypemap 		    = new ConcurrentHashMap<>();
 	
 	//private   Map<String, NodeImpl> Nodes;
 	//private   Map<String, Node> Neo4JNodes;
@@ -82,7 +82,7 @@ private void serializerHost() {
 		hostimpl.setDiskStorage(host_r.getAvailableStorage());	
 		hostmap.put(hostimpl.getHostName(), hostimpl);
 		
-		neo4j.map_passed(hostmap);
+		neo4j.map_host(hostmap);
 	}
 	System.out.println("** Finish Host Serializer **");
 	
@@ -108,6 +108,8 @@ private void serializerPerformance() {
 				performance.setDestinationHost(srj.getName());
 				String var = performance.getSourceHost() + "-" + performance.getDestinationHost();
 				perfmap.put(var, performance);
+				
+				neo4j.map_performance(perfmap);
 			}			
 		}
 		System.out.println("** Finish Performance Serializer **");
@@ -128,6 +130,8 @@ private void serializerVnf() {
 		ftypeimpl.setRequiredMemory(vnfType_r.getRequiredMemory());
 		ftypeimpl.setRequiredStorage(vnfType_r.getRequiredStorage());
 		ftypemap.put(ftypeimpl.getFunctionaltypeId(), ftypeimpl);
+		
+		neo4j.map_ftype(ftypemap);
 		
 	}
 	System.out.println("** Finish VNF Serializer **");

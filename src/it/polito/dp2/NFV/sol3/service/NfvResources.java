@@ -135,7 +135,68 @@ public class NfvResources {
 
 	}
 	
+	 /** 
+	 * This method allows to get all Hosts stored in the NffgService 
+	 * Some informations are stored into NffgService memory, others into Neo4JDB
+	 * @return  the List of Hosts stored in the service
+	 */
+	@GET
+	@Path("hosts")
+	@ApiOperation(value = "Get the set of all hosts", notes = "xml format")
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "OK"),
+			@ApiResponse(code = 500, message = "Internal Server Error")
+	})
+    @Produces(MediaType.APPLICATION_XML)
+	public HostC getHosts(){
+		HostC retval = new HostC(); 
+		retval.getHostImpl().addAll(neo4j.getHosts());
+		return retval;
+
+	}
 	
+	 /** 
+	 * This method allows to get all Catalog stored in the NffgService 
+	 * Some informations are stored into NffgService memory, others into Neo4JDB
+	 * @return  the List of Catalog stored in the service
+	 */
+	@GET
+	@Path("catalog")
+	@ApiOperation(value = "Get catalog", notes = "xml format")
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "OK"),
+			@ApiResponse(code = 500, message = "Internal Server Error")
+	})
+    @Produces(MediaType.APPLICATION_XML)
+	public Catalog getCatalog(){
+		Catalog retval = new Catalog(); 
+		retval.getFtypeImpl().addAll(neo4j.getCatalog());
+		return retval;
+
+	}
+	
+	/** 
+	 * This method allows to get all Perfromance stored in the NffgService 
+	 * Some informations are stored into NffgService memory, others into Neo4JDB
+	 * @return  the List of Performance stored in the service
+	 */
+	@GET
+	@Path("performances")
+	@ApiOperation(value = "Get catalog", notes = "xml format")
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "OK"),
+			@ApiResponse(code = 500, message = "Internal Server Error")
+	})
+    @Produces(MediaType.APPLICATION_XML)
+	public PerformanceC getPerformance(){
+		PerformanceC retval = new PerformanceC(); 
+		
+		retval.getPerformanceImpl().addAll(neo4j.getPerformance());
+		return retval;
+
+	}
+	
+
 	
 	/** 
 	 * This method allows to add a whole NFFG 
