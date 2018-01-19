@@ -367,7 +367,31 @@ public class NfvResources {
 			if (!Neo4JDB.Nodes.containsKey(link.getDestinationNode()))
 				throw new NoNodeException(); // DestionationNode not Found
 			
+			
 			NffgImpl nffg = Neo4JDB.nffgs.get(id);
+			
+			/*int count = 0;
+			
+			for(NodeImpl n : nffg.getNodeImpl()) {
+				//controllo se nell'xml della post link esistono due link uguali
+
+				for(LinkImpl l : n.getLinkImpl()) {
+					System.out.println("Ciclo il link lista1: " +l.getLinkName());
+					for(LinkImpl l2 : n.getLinkImpl()) {
+						System.out.println("Ciclo il nodo lista2: " + l2.getLinkName());
+						if( (l.getLinkName().equals(l2.getLinkName()))) {
+							System.out.println("ho trovato me stesso");
+							count+=1;						
+						}
+						if(count >= 2 ) {
+							System.out.println("Link duplicati all'interno della post nffg");
+							throw new ForbiddenException();
+						}
+					}
+					count = 0;
+				}
+				
+			}*/
 				
 			//cerco i link, se esiste vado a vedere il flag se è true o false (true aggiorno il link, false exception)
 			if(neo4j.checkLink(id,link)) {
