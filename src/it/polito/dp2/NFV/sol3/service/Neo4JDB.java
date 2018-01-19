@@ -64,6 +64,11 @@ public static Object getSynchObject(){
 
 public boolean loadnffg(NffgImpl nffg) throws NfvReaderException, ServiceException {
 	
+	for(NodeImpl n : nffg.getNodeImpl()) {
+		if(Nodes.containsKey(n.getNodeName()))
+			return false;
+	}
+	
 	/*Correct Load*/
     //NffgMap.put(nffgReader.getName(), nffgReader);
 

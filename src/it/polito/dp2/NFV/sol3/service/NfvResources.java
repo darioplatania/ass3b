@@ -221,9 +221,30 @@ public class NfvResources {
 			synchronized(Neo4JDB.getSynchObject()) {
 				if (Neo4JDB.nffgs.containsKey(nffg.getNameNffg()))
 					throw new ForbiddenException();
+				
+				//controllo se nell'xml della post nffg esistono due nodi uguali
+				int count = 0;
+				
+				for(NodeImpl n : nffg.getNodeImpl()) {
+					System.out.println("Ciclo il nodo lista1: " + n.getNodeName());
+					for(NodeImpl n2 : nffg.getNodeImpl()) {
+						System.out.println("Ciclo il nodo lista2: " + n2.getNodeName());
+						if( (n.getNodeName().equals(n2.getNodeName()))) {
+							System.out.println("ho trovato me stesso");
+							count+=1;						
+						}
+						if(count >= 2 ) {
+							System.out.println("Nodi duplicati all'interno della post nffg");
+							throw new ForbiddenException();
+						}
+					}
+					count = 0;
+				}
 
 				if (!neo4j.loadnffg(nffg))
 					throw new InternalServerErrorException();
+				
+				
 			}
 			// neo4j.loadnffg(nffg);
 		}catch(NfvReaderException | ServiceException e){
