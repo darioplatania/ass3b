@@ -193,45 +193,47 @@ public class NfvResources {
 	public void addNode(@PathParam("id") String id, NodeImpl node){
 		
 		try {
+			synchronized(Neo4JDB.getSynchObject()) {
 
-			if (!Neo4JDB.nffgs.containsKey(id))
-				throw new NotFoundException("Nffg Not Found!"); // Nffg Not Found
-
-			if (Neo4JDB.Nodes.containsKey(node.getNodeName()))
-				throw new ForbiddenException(); // Node Present
-
-			/* vedo se nell'xml c'è l'host */
-			if (node.getHostName() != null) {
-				/* se c'è lo cerco nella mappa */
-				if (!Neo4JDB.hostmap_appoggio.containsKey(node.getHostName())) {
-					/*se nella mappa non esiste eccezzione*/
-					System.out.println("Host non presente nella mappa..eccezione!");
-						throw new NotFoundException(); //Host Not Found
+				if (!Neo4JDB.nffgs.containsKey(id))
+					throw new NotFoundException("Nffg Not Found!"); // Nffg Not Found
+	
+				if (Neo4JDB.Nodes.containsKey(node.getNodeName()))
+					throw new ForbiddenException(); // Node Present
+	
+				/* vedo se nell'xml c'è l'host */
+				if (node.getHostName() != null) {
+					/* se c'è lo cerco nella mappa */
+					if (!Neo4JDB.hostmap_appoggio.containsKey(node.getHostName())) {
+						/*se nella mappa non esiste eccezzione*/
+						System.out.println("Host non presente nella mappa..eccezione!");
+							throw new NotFoundException(); //Host Not Found
+							
+					/*se nella mappa non esiste cerco un host e faccio la load
+						String host_casuale = neo4j.searchHost();
 						
-				/*se nella mappa non esiste cerco un host e faccio la load
+						NffgImpl nffg = Neo4JDB.nffgs.get(id);
+						if (!neo4j.loadNode(nffg,node,host_casuale))
+							throw new InternalServerErrorException();*/
+						
+					}
+					else {
+						System.out.println("Host presente nella mappa..alloco!");
+						NffgImpl nffg = Neo4JDB.nffgs.get(id);
+						if (!neo4j.loadNode(nffg,node,node.getHostName()))
+							throw new InternalServerErrorException();
+					}
+				}
+				//else lo metto in un host a piacere
+				else {
+					System.out.println("Non c'è host nell'xml lo scelgo casualmente");
+	
 					String host_casuale = neo4j.searchHost();
 					
 					NffgImpl nffg = Neo4JDB.nffgs.get(id);
 					if (!neo4j.loadNode(nffg,node,host_casuale))
-						throw new InternalServerErrorException();*/
-					
-				}
-				else {
-					System.out.println("Host presente nella mappa..alloco!");
-					NffgImpl nffg = Neo4JDB.nffgs.get(id);
-					if (!neo4j.loadNode(nffg,node,node.getHostName()))
 						throw new InternalServerErrorException();
 				}
-			}
-			//else lo metto in un host a piacere
-			else {
-				System.out.println("Non c'è host nell'xml lo scelgo casualmente");
-
-				String host_casuale = neo4j.searchHost();
-				
-				NffgImpl nffg = Neo4JDB.nffgs.get(id);
-				if (!neo4j.loadNode(nffg,node,host_casuale))
-					throw new InternalServerErrorException();
 			}
 
 
@@ -264,46 +266,49 @@ public class NfvResources {
 	})
 	public void addLink(@PathParam("id") String id, LinkImpl link){
 	try {
+		
+		synchronized(Neo4JDB.getSynchObject()) {
 
-		if (!Neo4JDB.nffgs.containsKey(id))
-			throw new NotFoundException("Nffg Not Found!"); // Nffg Not Found
-		
-		if(link.getLinkName() == null)
-			throw new InternalServerErrorException();
-		if(link.getSourceNode() == null)
-			throw new InternalServerErrorException();
-		if(link.getDestinationNode() == null)
-			throw new InternalServerErrorException();	
-		
-		if (!Neo4JDB.Nodes.containsKey(link.getSourceNode()))
-			throw new NoNodeException(); // SourceNode not Found
-		
-		if (!Neo4JDB.Nodes.containsKey(link.getDestinationNode()))
-			throw new NoNodeException(); // DestionationNode not Found
-		
-		NffgImpl nffg = Neo4JDB.nffgs.get(id);
+			if (!Neo4JDB.nffgs.containsKey(id))
+				throw new NotFoundException("Nffg Not Found!"); // Nffg Not Found
 			
-		//cerco i link, se esiste vado a vedere il flag se è true o false (true aggiorno il link, false exception)
-		if(neo4j.checkLink(id,link)) {
-			System.out.println("Controllo il flag");
+			if(link.getLinkName() == null)
+				throw new InternalServerErrorException();
+			if(link.getSourceNode() == null)
+				throw new InternalServerErrorException();
+			if(link.getDestinationNode() == null)
+				throw new InternalServerErrorException();	
 			
-			if(!link.isOverwrite()) {
-				//flag false quindi eccezione
-				System.out.println("Flag false---eccezione");
-				throw new LinkAlreadyPresentException();	
+			if (!Neo4JDB.Nodes.containsKey(link.getSourceNode()))
+				throw new NoNodeException(); // SourceNode not Found
+			
+			if (!Neo4JDB.Nodes.containsKey(link.getDestinationNode()))
+				throw new NoNodeException(); // DestionationNode not Found
+			
+			NffgImpl nffg = Neo4JDB.nffgs.get(id);
+				
+			//cerco i link, se esiste vado a vedere il flag se è true o false (true aggiorno il link, false exception)
+			if(neo4j.checkLink(id,link)) {
+				System.out.println("Controllo il flag");
+				
+				if(!link.isOverwrite()) {
+					//flag false quindi eccezione
+					System.out.println("Flag false---eccezione");
+					throw new LinkAlreadyPresentException();	
+				}
+				else {
+			    System.out.println("Flag true");
+				//aggiorno link da implmentare
+				neo4j.upLink(nffg,link);
+				//neo4j.loadLink(nffg, link);
+				}
+				
 			}
+			//se non esiste lo carico
 			else {
-		    System.out.println("Flag true");
-			//aggiorno link da implmentare
-			neo4j.upLink(nffg,link);
-			//neo4j.loadLink(nffg, link);
+				System.out.println("Nodo non esiste--lo carico");
+				neo4j.loadLink(nffg,link);			
 			}
-			
-		}
-		//se non esiste lo carico
-		else {
-			System.out.println("Nodo non esiste--lo carico");
-			neo4j.loadLink(nffg,link);			
 		}
 	}
 	catch(ServiceException | LinkAlreadyPresentException | NoNodeException e) {

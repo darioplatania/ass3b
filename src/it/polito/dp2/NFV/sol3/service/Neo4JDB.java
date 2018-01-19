@@ -495,19 +495,25 @@ public void upLink(NffgImpl nffg,LinkImpl link) {
 				}
 
 			}
+		}else {
+			for(int i = 0; i<n.getLinkImpl().size();i++) {
+				if(n.getLinkImpl().get(i).getLinkName().equals(link.getLinkName())) {
+					n.getLinkImpl().remove(i);
+					System.out.println("Link Rimosso");
+						for(NodeImpl n1 : nffg_link.getNodeImpl()) {
+							if(n1.getNodeName().equals(link.getSourceNode())) {
+								n1.getLinkImpl().add(link);
+								System.out.println("Link Aggiunto dopo rimozione");
+								break;
+							}
+						}
+				 break;
+				}
+			}			
 		}
 	}
 	
 	
-	
-	
-	/*NffgImpl nffg_link = nffgs.get(nffg.getNameNffg());
-	
-	for(NodeImpl n : nffg_link.getNodeImpl()) {
-		if(n.getNodeName().equals(link.getSourceNode())) {
-			n.getLinkImpl().remove(link);
-		}
-	}*/
 }
 
 
