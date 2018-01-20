@@ -214,7 +214,7 @@ public class NfvResources {
 			@ApiResponse(code = 403, message = "Forbidden"),
 			@ApiResponse(code = 500, message = "Internal Server Error")
 	})	
-	public void addNffg(NffgImpl nffg){
+	public NffgImpl addNffg(NffgImpl nffg){
 		//serviceException & NfvReaderException le uso la prima nella create node e la seconda nei check dell'host
 		
 		try{
@@ -243,6 +243,7 @@ public class NfvResources {
 
 				if (!neo4j.loadnffg(nffg))
 					throw new InternalServerErrorException();
+				return Neo4JDB.nffgs.get(nffg.getNameNffg());
 				
 				
 			}
@@ -272,7 +273,7 @@ public class NfvResources {
 			@ApiResponse(code = 404, message = "Not Found"),
 			@ApiResponse(code = 500, message = "Internal Server Error")
 	})
-	public void addNode(@PathParam("id") String id, NodeImpl node){
+	public NodeImpl addNode(@PathParam("id") String id, NodeImpl node){
 		
 		try {
 			synchronized(Neo4JDB.getSynchObject()) {
@@ -304,6 +305,8 @@ public class NfvResources {
 						NffgImpl nffg = Neo4JDB.nffgs.get(id);
 						if (!neo4j.loadNode(nffg,node,node.getHostName()))
 							throw new InternalServerErrorException();
+						else
+							return Neo4JDB.Nodes.get(node.getNodeName());
 					}
 				}
 				//else lo metto in un host a piacere
@@ -315,6 +318,8 @@ public class NfvResources {
 					NffgImpl nffg = Neo4JDB.nffgs.get(id);
 					if (!neo4j.loadNode(nffg,node,host_casuale))
 						throw new InternalServerErrorException();
+					else
+						return Neo4JDB.Nodes.get(node.getNodeName());
 				}
 			}
 
