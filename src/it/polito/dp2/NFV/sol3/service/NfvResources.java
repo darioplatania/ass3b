@@ -372,12 +372,12 @@ public class NfvResources {
 			if (!Neo4JDB.nffgs.containsKey(id))
 				throw new NotFoundException("Nffg Not Found!"); // Nffg Not Found
 			
-			if(link.getLinkName() == null)
-				throw new InternalServerErrorException();
-			if(link.getSourceNode() == null)
-				throw new InternalServerErrorException();
-			if(link.getDestinationNode() == null)
-				throw new InternalServerErrorException();	
+			if(link.getLinkName() == null || link.getLinkName().equals(""))
+				throw new ForbiddenException();
+			if(link.getSourceNode() == null || link.getLinkName().equals(""))
+				throw new ForbiddenException();
+			if(link.getDestinationNode() == null || link.getLinkName().equals(""))
+				throw new ForbiddenException();	
 			
 			if (!Neo4JDB.Nodes.containsKey(link.getSourceNode()))
 				throw new NoNodeException(); // SourceNode not Found
