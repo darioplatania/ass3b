@@ -219,9 +219,15 @@ public class NfvResources {
 		
 		try{
 			synchronized(Neo4JDB.getSynchObject()) {
-				if (Neo4JDB.nffgs.containsKey(nffg.getNameNffg()))
+				
+				//vedo se nell'xml esiste il nome della nffg
+				if (nffg.getNameNffg() == null || nffg.getNameNffg().equals(""))
 					throw new ForbiddenException();
 				
+				//vedo se già esiste
+				if (Neo4JDB.nffgs.containsKey(nffg.getNameNffg()))
+					throw new ForbiddenException();
+
 				//controllo se nell'xml della post nffg esistono due nodi uguali
 				int count = 0;
 				

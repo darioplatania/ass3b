@@ -12,6 +12,7 @@ public class NfvClientImpl implements NfvClient{
 	@Override
 	public DeployedNffg deployNffg(NffgDescriptor nffg) throws AllocationException, ServiceException {
 		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
