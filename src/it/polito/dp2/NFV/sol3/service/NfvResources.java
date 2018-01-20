@@ -286,12 +286,19 @@ public class NfvResources {
 
 				if (!Neo4JDB.nffgs.containsKey(id))
 					throw new NotFoundException("Nffg Not Found!"); // Nffg Not Found
+				
+				//vedo se nell'xml esiste il nome del nodo
+				if (node.getNodeName() == null ||node.getNodeName().equals(""))
+					throw new ForbiddenException();
 	
 				if (Neo4JDB.Nodes.containsKey(node.getNodeName()))
 					throw new ForbiddenException(); // Node Present
+				
+				if(node.getHostName().equals(""))
+					throw new ForbiddenException(); //non esiste il nome dell'host
 	
 				/* vedo se nell'xml c'è l'host */
-				if (node.getHostName() != null) {
+				if ((node.getHostName() != null)) {
 					/* se c'è lo cerco nella mappa */
 					if (!Neo4JDB.hostmap_appoggio.containsKey(node.getHostName())) {
 						/*se nella mappa non esiste eccezzione*/
@@ -315,7 +322,7 @@ public class NfvResources {
 							return Neo4JDB.Nodes.get(node.getNodeName());
 					}
 				}
-				//else lo metto in un host a piacere
+				//se non c'è lo metto in un host a piacere
 				else {
 					System.out.println("Non c'è host nell'xml lo scelgo casualmente");
 	
