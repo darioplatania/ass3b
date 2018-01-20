@@ -422,21 +422,34 @@ public class NfvResources {
 	}
 		
 	}
+	
+	
+	@DELETE
+	@Path("{id}/delNode")
+	@ApiOperation(value = "Delete Nffgs", notes = "xml format")
+	@ApiResponses(value = {
+			@ApiResponse(code = 501, message = "Not Implemented")
+	})
+    @Produces(MediaType.APPLICATION_XML)
+	public NffgImpl deleteNode(){
+		
+		throw new NotAllowedException("Http Method not supported");
 
-	
-	
-	
-	@GET
-	@Path("prova")
-	@Produces(MediaType.TEXT_PLAIN)
-	public String prova() {
-		return "hello world";
 	}
 	
-	
-	
-	
-	
+	@DELETE
+	@Path("{id}/delLink")
+	@ApiOperation(value = "Delete Nffgs", notes = "xml format")
+	@ApiResponses(value = {
+			@ApiResponse(code = 501, message = "Not Implemented")
+	})
+    @Produces(MediaType.APPLICATION_XML)
+	public NffgImpl deleteLink(){
+		
+		throw new NotAllowedException("Http Method not supported");
+
+	}
+
 	
 }
 
