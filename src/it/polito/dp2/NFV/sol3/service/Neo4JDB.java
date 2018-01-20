@@ -91,6 +91,8 @@ public boolean loadnffg(NffgImpl nffg) throws NfvReaderException, ServiceExcepti
 		            HostPropertiesCreate(node.getHostName());	          
 		            NodeHostRel(node.getNodeName(),node.getHostName());
 		        }
+		        	else
+		        		return false;
 	        	}
 	    }
 	    
