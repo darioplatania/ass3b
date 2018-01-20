@@ -417,14 +417,27 @@ public boolean loadNode(NffgImpl nffg , NodeImpl node, String hostname) throws N
 		return true;
 	}
 	else{
-	NodePropertiesCreate(node.getNodeName());
-	   NodeHostRel(node.getNodeName(), hostname);
-		if(!Nodes.containsKey(node.getNodeName())) {
-			node.setHostName(hostname);
-			Nodes.put(node.getNodeName(), node);
-		}
-		nffg.getNodeImpl().add(node);
-		nffgs.put(nffg.getNameNffg(), nffg);	
+		boolean res_node = NodePropertiesCreate(node.getNodeName());
+	    	if(res_node == true) {
+	    		NodeHostRel(node.getNodeName(), hostname);
+	    		if(!Nodes.containsKey(node.getNodeName())) {
+	    			node.setHostName(hostname);
+	    			Nodes.put(node.getNodeName(), node);
+	    		}
+	    		nffg.getNodeImpl().add(node);
+	    		nffgs.put(nffg.getNameNffg(), nffg);	
+	    }
+	    	else
+	    		return false;	
+	
+		/*NodePropertiesCreate(node.getNodeName());
+		   NodeHostRel(node.getNodeName(), hostname);
+			if(!Nodes.containsKey(node.getNodeName())) {
+				node.setHostName(hostname);
+				Nodes.put(node.getNodeName(), node);
+			}
+			nffg.getNodeImpl().add(node);
+			nffgs.put(nffg.getNameNffg(), nffg);	*/
 	}
 	
 		   
