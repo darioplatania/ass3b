@@ -6,47 +6,48 @@ import it.polito.dp2.NFV.HostReader;
 import it.polito.dp2.NFV.NodeReader;
 import it.polito.dp2.NFV.sol3.jaxb.*;
 
-public class HostReaderImpl extends NamedEntityReaderImpl implements HostReader {
+public class HostReaderImpl implements HostReader {
 	
+	private String name;
 	private int availablememory;
 	private int availablestorage;
 	private int maxvnf;
-	private HashMap<String,NodeReader> nodes;
+	private Map<String,NodeReader> nodes;
 	
 	public HostReaderImpl(HostImpl host){
-		super(host.getHostName());
+		this.name = host.getHostName();
 		this.availablememory = host.getMemory();
 		this.availablestorage = host.getDiskStorage();
 		this.maxvnf = host.getNumberVNFs();
-		this.nodes = new HashMap<String,NodeReader>();
+		this.nodes = new HashMap<>();
 	}
 
 	@Override
 	public int getAvailableMemory() {
-		return this.availablememory;
+		return availablememory;
 	}
 
 	@Override
 	public int getAvailableStorage() {
-		return this.availablestorage;
+		return availablestorage;
 	}
 
 	@Override
 	public int getMaxVNFs() {
-		return this.maxvnf;
+		return maxvnf;
 	}
 
 	@Override
 	public Set<NodeReader> getNodes() {
-		return new LinkedHashSet<NodeReader>(this.nodes.values());
+		return new HashSet<NodeReader>(nodes.values());
 	}
 	
 	 @Override
 	 public String getName() {
-		 return super.getName();
+		 return name;
 	 }
 	
-	 public void addNode(NodeReaderImpl node) {
+	 public void addNode(NodeReader node) {
 		 if(node != null) {
 			 this.nodes.put(node.getName(), node);
 		 }

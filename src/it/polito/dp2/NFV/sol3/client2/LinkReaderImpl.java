@@ -3,8 +3,9 @@ package it.polito.dp2.NFV.sol3.client2;
 import it.polito.dp2.NFV.LinkReader;
 import it.polito.dp2.NFV.NodeReader;
 
-public class LinkReaderImpl extends NamedEntityReaderImpl implements LinkReader {
+public class LinkReaderImpl implements LinkReader {
 	
+	String name;
 	private NodeReader source;
 	private NodeReader dest;
 	private int latency;
@@ -12,36 +13,44 @@ public class LinkReaderImpl extends NamedEntityReaderImpl implements LinkReader 
 	
 
 	public LinkReaderImpl(String name,NodeReader source, NodeReader dest,int latency,float throughput) {
-		super(name);
+		this.name = name;
 		this.source = source;
 		this.dest = dest;
 		this.latency = latency;
 		this.throughput = throughput;
 	}
 	
+	public LinkReaderImpl(String name,NodeReader source, NodeReader dest) {
+		this.name = name;
+		this.source = source;
+		this.dest = dest;
+		this.latency = 0;
+		this.throughput = (float) 0.0;
+	}
+	
 	@Override
 	public NodeReader getDestinationNode() {
-		return this.dest;
+		return dest;
 	}
 	
 	@Override
 	public NodeReader getSourceNode() {
-		return this.source;
+		return source;
 	}
 
 	@Override
 	public String getName() {
-		return super.getName();
+		return name;
 	}
 
 	@Override
 	public int getLatency() {
-		return this.latency;
+		return latency;
 	}
 
 	@Override
 	public float getThroughput() {
-		return this.throughput;
+		return throughput;
 	}
 	
 	public void setDestinationNode(NodeReader dest){

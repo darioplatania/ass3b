@@ -5,15 +5,16 @@ import it.polito.dp2.NFV.FunctionalType;
 import it.polito.dp2.NFV.VNFTypeReader;
 import it.polito.dp2.NFV.sol3.jaxb.*;
 
-public class VNFTypeReaderImpl extends NamedEntityReaderImpl implements VNFTypeReader {
+public class VNFTypeReaderImpl implements VNFTypeReader {
 	
+	private String name;
 	private int requiredmemory;
 	private int requiredstorage;	
 	private FunctionalType functionalType;
 	private NodeFunctionalType fType;
 		
 	public VNFTypeReaderImpl(FtypeImpl functionalType) {
-		super(functionalType.getFunctionaltypeId());
+		this.name = functionalType.getFunctionaltypeId();
 		this.requiredmemory = functionalType.getRequiredMemory();
 		this.requiredstorage = functionalType.getRequiredStorage();
 		this.functionalType = FunctionalType.valueOf(functionalType.getFunctionalTypeName().toString());
@@ -22,20 +23,20 @@ public class VNFTypeReaderImpl extends NamedEntityReaderImpl implements VNFTypeR
 
 	@Override
 	public FunctionalType getFunctionalType() {
-		return this.functionalType;
+		return functionalType;
 	}
 
 	@Override
 	public int getRequiredMemory() {
-		return this.requiredmemory;
+		return requiredmemory;
 	}
 
 	@Override
 	public int getRequiredStorage() {
-		return this.requiredstorage;
+		return requiredstorage;
 	}
 	
 	public String getName() {
-		return super.getName();
+		return name;
 	}			
 }

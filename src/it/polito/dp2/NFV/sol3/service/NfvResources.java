@@ -7,7 +7,6 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import io.swagger.annotations.*;
 import it.polito.dp2.NFV.NfvReaderException;
 import it.polito.dp2.NFV.lab3.LinkAlreadyPresentException;
-import it.polito.dp2.NFV.lab3.NoNodeException;
 import it.polito.dp2.NFV.lab3.ServiceException;
 import it.polito.dp2.NFV.sol3.jaxb.*;
 
@@ -227,6 +226,18 @@ public class NfvResources {
 				//vedo se già esiste
 				if (Neo4JDB.nffgs.containsKey(nffg.getNameNffg()))
 					throw new ForbiddenException();
+				
+				/*//DestinationNode non presente nei nodi all'interno di questa Nffg
+				for(NodeImpl n1 : nffg.getNodeImpl()) {
+					System.out.println("Nodo nome: " + n1.getNodeName());
+					for(NodeImpl n2 : nffg.getNodeImpl()) {
+						for(LinkImpl l1 : n2.getLinkImpl()) {
+							System.out.println("Link name + dest node: " + l1.getLinkName() + l1.getDestinationNode());
+							if (!Neo4JDB.Nodes.containsKey(l1.getDestinationNode()))
+								throw new ForbiddenException();
+						}
+					}
+				}*/
 
 				//controllo se nell'xml della post nffg esistono due nodi uguali
 				int count = 0;
@@ -246,7 +257,7 @@ public class NfvResources {
 					}
 					count = 0;
 				}
-
+				
 				if (!neo4j.loadnffg(nffg))
 					throw new InternalServerErrorException();
 				return Neo4JDB.nffgs.get(nffg.getNameNffg());
@@ -357,14 +368,14 @@ public class NfvResources {
 	@POST
 	@Path("{id}/addLink")
 	@Consumes(MediaType.APPLICATION_XML)
-	@ApiOperation(value = "Add single Node", notes = "xml format")
+	@ApiOperation(value = "Add a Link", notes = "xml format")
 	@ApiResponses(value = {
 			@ApiResponse(code = 201, message = "Created"),
 			@ApiResponse(code = 403, message = "Forbidden"),
 			@ApiResponse(code = 404, message = "Not Found"),
 			@ApiResponse(code = 500, message = "Internal Server Error")
 	})
-	public void addLink(@PathParam("id") String id, LinkImpl link){
+	public LinkImpl addLink(@PathParam("id") String id, LinkImpl link){
 	try {
 		
 		synchronized(Neo4JDB.getSynchObject()) {
@@ -373,17 +384,17 @@ public class NfvResources {
 				throw new NotFoundException("Nffg Not Found!"); // Nffg Not Found
 			
 			if(link.getLinkName() == null || link.getLinkName().equals(""))
-				throw new ForbiddenException();
+				throw new ForbiddenException("LinkName Problems");
 			if(link.getSourceNode() == null || link.getLinkName().equals(""))
-				throw new ForbiddenException();
+				throw new ForbiddenException("SourceNode Problems");
 			if(link.getDestinationNode() == null || link.getLinkName().equals(""))
-				throw new ForbiddenException();	
+				throw new ForbiddenException("DestNode Problems");	
 			
 			if (!Neo4JDB.Nodes.containsKey(link.getSourceNode()))
-				throw new NoNodeException(); // SourceNode not Found
+				throw new ForbiddenException("SourceNode non presente nella mappa"); // SourceNode not Found
 			
 			if (!Neo4JDB.Nodes.containsKey(link.getDestinationNode()))
-				throw new NoNodeException(); // DestionationNode not Found
+				throw new ForbiddenException("DestNode non presente nella mappa"); // DestionationNode not Found
 			
 			
 			NffgImpl nffg = Neo4JDB.nffgs.get(id);
@@ -410,6 +421,7 @@ public class NfvResources {
 				}
 				
 			}*/
+			
 				
 			//cerco i link, se esiste vado a vedere il flag se è true o false (true aggiorno il link, false exception)
 			if(neo4j.checkLink(id,link)) {
@@ -423,7 +435,9 @@ public class NfvResources {
 				else {
 			    System.out.println("Flag true");
 				//aggiorno link da implmentare
-				neo4j.upLink(nffg,link);
+				LinkImpl link_n = neo4j.upLink(nffg,link);
+				
+				return link_n;
 				//neo4j.loadLink(nffg, link);
 				}
 				
@@ -431,12 +445,14 @@ public class NfvResources {
 			//se non esiste lo carico
 			else {
 				System.out.println("Nodo non esiste--lo carico");
-				neo4j.loadLink(nffg,link);			
+				LinkImpl link_n = neo4j.loadLink(nffg,link);		
+				
+				return link_n;
 			}
 		}
 	}
-	catch(ServiceException | LinkAlreadyPresentException | NoNodeException e) {
-		throw new InternalServerErrorException();	
+	catch(ServiceException | LinkAlreadyPresentException e) {
+		throw new ForbiddenException();	
 	}
 		
 	}
@@ -449,9 +465,9 @@ public class NfvResources {
 			@ApiResponse(code = 501, message = "Not Implemented")
 	})
     @Produces(MediaType.APPLICATION_XML)
-	public NffgImpl deleteNode(){
+	public NffgImpl deleteNode() throws NotImplementedException{
 		
-		throw new NotAllowedException("Http Method not supported");
+		throw new NotImplementedException("Method not Implemented");
 
 	}
 	
@@ -462,9 +478,9 @@ public class NfvResources {
 			@ApiResponse(code = 501, message = "Not Implemented")
 	})
     @Produces(MediaType.APPLICATION_XML)
-	public NffgImpl deleteLink(){
+	public NffgImpl deleteLink() throws NotImplementedException {
 		
-		throw new NotAllowedException("Http Method not supported");
+		throw new NotImplementedException("Method not Implemented");
 
 	}
 

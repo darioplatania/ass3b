@@ -107,6 +107,10 @@ public class NfvReaderImpl implements NfvReader {
 							if(dstnode == null)
 								throw new NfvReaderException("Destination Node not found");
 							
+							if(l.getMinThroughput() == null)
+								l.setMinThroughput(new Float (0.0));
+							if(l.getMaxLatency() == null)
+								l.setMaxLatency(0);
 							LinkReaderImpl link_impl = new LinkReaderImpl(l.getLinkName(),newNode,dstnode,l.getMaxLatency(),l.getMinThroughput());
 							newNode.addLink(link_impl);
 						}
@@ -365,7 +369,8 @@ public class NfvReaderImpl implements NfvReader {
 		// TODO Auto-generated method stub
 		for(Map.Entry<String, NffgReaderImpl> nffgr:this.nffgs.entrySet()){
 			if(nffgr.getValue().getName().equals(arg0))
-				return (NffgReader) nffgr;
+				//return (NffgReader) nffgr;
+			 return this.nffgs.get(arg0);
 		}
 		return null;
 	}

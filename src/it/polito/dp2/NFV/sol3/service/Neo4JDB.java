@@ -179,7 +179,7 @@ private void NodeLinkRel(String srcNode, String destNode) throws ServiceExceptio
 	
     Relationship rel = new Relationship();
     rel.setType("ForwardsTo");
-    rel.setDstNode(Neo4JNodes.get(destNode).getId());
+    rel.setDstNode(Neo4JNodes.get(destNode).getId());	
 
      /*Post Relationship */
      resp = client.target(BaseURI+"/node/"+Neo4JNodes.get(srcNode).getId()+"/relationships").request(MediaType.APPLICATION_XML).post(Entity.entity(rel,MediaType.APPLICATION_XML),Response.class);
@@ -484,25 +484,31 @@ public boolean checkLink(String nffgname,LinkImpl link) throws ServiceException{
 	
 	System.out.println("** Init checkLink **");
 	
-	//false return non esite, true return esiste
+	//false return non esiste, true return esiste
 	
 	NffgImpl nffg_link = nffgs.get(nffgname);
 	
 	for(NodeImpl n : nffg_link.getNodeImpl()) {
 		for(LinkImpl l : n.getLinkImpl()) {	
-			if(l.getLinkName().equals(link.getLinkName())) {
+			if( (l.getSourceNode().equals(link.getSourceNode())) && (l.getDestinationNode().equals(link.getDestinationNode())) ) {
+				System.out.println("Esiste un nodo con gli stessi source e dest");
+				System.out.println("Nodo: " + n.getNodeName() + " Source: " + link.getSourceNode() + " Dest: " + link.getDestinationNode());
+				return true;
+			}
+			/*if(l.getLinkName().equals(link.getLinkName())) {
 				System.out.println("Il Link : " + link.getLinkName() + " esiste nel nodo: " + n.getNodeName());
 				return true;	
-			}
+			}*/
 			//n.getLinkImpl().add(link);
 		}
 	}
 	return false;
 }
 
-public void loadLink(NffgImpl nffg, LinkImpl link) throws ServiceException {
+public LinkImpl loadLink(NffgImpl nffg, LinkImpl link) throws ServiceException {
 	
 	System.out.println("** Init loadLink **");
+	
 	
 	NodeLinkRel(link.getSourceNode(),link.getDestinationNode());
 	
@@ -513,14 +519,18 @@ public void loadLink(NffgImpl nffg, LinkImpl link) throws ServiceException {
 			n.getLinkImpl().add(link);
 		}
 	}
+	
+	return link;
 
 }
 
-public void upLink(NffgImpl nffg,LinkImpl link) {
+public LinkImpl upLink(NffgImpl nffg,LinkImpl link) {
 	
 	System.out.println("** Init upLink **");
 	
 	NffgImpl nffg_link = nffgs.get(nffg.getNameNffg());
+	
+	LinkImpl linkimpl = null;
 	
 	
 	
@@ -528,7 +538,8 @@ public void upLink(NffgImpl nffg,LinkImpl link) {
 	for(NodeImpl n : nffg_link.getNodeImpl()) {
 		if(n.getNodeName().equals(link.getSourceNode())) {
 			for(int i = 0; i<n.getLinkImpl().size();i++) {
-				if(n.getLinkImpl().get(i).getLinkName().equals(link.getLinkName())) {
+				if( (n.getLinkImpl().get(i).getSourceNode().equals(link.getSourceNode())) && (n.getLinkImpl().get(i).getDestinationNode().equals(link.getDestinationNode())) ) {  					
+				//if(n.getLinkImpl().get(i).getLinkName().equals(link.getLinkName())) {
 					n.getLinkImpl().get(i).setLinkName(link.getLinkName());
 					n.getLinkImpl().get(i).setSourceNode(n.getLinkImpl().get(i).getSourceNode());
 					n.getLinkImpl().get(i).setDestinationNode(n.getLinkImpl().get(i).getDestinationNode());
@@ -536,12 +547,15 @@ public void upLink(NffgImpl nffg,LinkImpl link) {
 					n.getLinkImpl().get(i).setMinThroughput(link.getMinThroughput());
 					n.getLinkImpl().get(i).setOverwrite(false);
 					n.getLinkImpl().set(i, n.getLinkImpl().get(i));
+					
+					linkimpl = n.getLinkImpl().get(i);
 				}
 
 			}
-		}else {
+		}/*else {
 			for(int i = 0; i<n.getLinkImpl().size();i++) {
-				if(n.getLinkImpl().get(i).getLinkName().equals(link.getLinkName())) {
+				if( (n.getLinkImpl().get(i).getSourceNode().equals(link.getSourceNode())) && (n.getLinkImpl().get(i).getDestinationNode().equals(link.getDestinationNode())) ) {  
+				//if(n.getLinkImpl().get(i).getLinkName().equals(link.getLinkName())) {
 					n.getLinkImpl().remove(i);
 					System.out.println("Link Rimosso");
 						for(NodeImpl n1 : nffg_link.getNodeImpl()) {
@@ -554,8 +568,10 @@ public void upLink(NffgImpl nffg,LinkImpl link) {
 				 break;
 				}
 			}			
-		}
+		}*/
 	}
+	
+	return linkimpl;
 	
 	
 }

@@ -8,8 +8,9 @@ import it.polito.dp2.NFV.VNFTypeReader;
 
 import java.util.*;
 
-public class NodeReaderImpl extends NamedEntityReaderImpl implements NodeReader {
+public class NodeReaderImpl implements NodeReader {
 	
+		private String name;
 		private HostReader hosts;
 		private NffgReader nffgs;
 		private VNFTypeReader vnfs;		
@@ -17,36 +18,41 @@ public class NodeReaderImpl extends NamedEntityReaderImpl implements NodeReader 
 	
 	
 	public NodeReaderImpl(String name,HostReader hosts,NffgReader nffgs,VNFTypeReader vnfs) {
-		super(name);
+		this.name = name;
 		this.hosts = hosts;
-		this.links = new HashMap<String,LinkReader>();
+		links = new HashMap<>();
 		this.nffgs = nffgs;
 		this.vnfs = vnfs;
 	}
-
+	
+	@Override
+	public String getName() {
+		return name;
+	}
+	
 	@Override
 	public VNFTypeReader getFuncType() {
-		return this.vnfs;
+		return vnfs;
 	}
 
 	@Override
 	public HostReader getHost() {
-		return this.hosts;
+		return hosts;
 	}
 
 	@Override
 	public Set<LinkReader> getLinks() {
-		return new LinkedHashSet<LinkReader>(this.links.values());
+		return new HashSet<LinkReader>(links.values());
 	}
 
 	@Override
 	public NffgReader getNffg() {
-		return this.nffgs;
+		return nffgs;
 	}
 
 	public void addLink(LinkReader link){
 		if(link != null)
-		this.links.put(link.getName(), link);
+		links.put(link.getName(), link);
 	}
 	
 	public LinkReader getLink(String LID){

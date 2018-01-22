@@ -44,8 +44,8 @@ public class NfvDeployer {
 	
 	public NfvDeployer() throws NfvReaderException {
 		
-		System.setProperty("it.polito.dp2.NFV.NfvReaderFactory", "it.polito.dp2.NFV.Random.NfvReaderFactoryImpl");
-		monitor = NfvReaderFactory.newInstance().newNfvReader();
+		NfvReaderFactory factory = NfvReaderFactory.newInstance();
+		monitor = factory.newNfvReader();
 		
 		neo4j = new Neo4JDB();
 
