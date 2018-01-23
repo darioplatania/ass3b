@@ -14,7 +14,6 @@ import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import it.polito.dp2.NFV.NfvReaderException;
-import it.polito.dp2.NFV.lab3.ServiceException;
 import it.polito.dp2.NFV.sol3.jaxb.*;
 import it.polito.dp2.NFV.sol3.service.neo4j.Labels;
 import it.polito.dp2.NFV.sol3.service.neo4j.Node;
@@ -62,7 +61,7 @@ public static Object getSynchObject(){
 }
 	
 
-public boolean loadnffg(NffgImpl nffg) throws NfvReaderException, ServiceException {
+public boolean loadnffg(NffgImpl nffg) throws NfvReaderException, Exception {
 	
 	for(NodeImpl n : nffg.getNodeImpl()) {
 		if(Nodes.containsKey(n.getNodeName()))
@@ -118,7 +117,7 @@ public boolean loadnffg(NffgImpl nffg) throws NfvReaderException, ServiceExcepti
  */
 
 
-private boolean NodePropertiesCreate(String nodeName) throws ServiceException{
+private boolean NodePropertiesCreate(String nodeName) throws Exception{
 	System.out.println("*** Init Node Properties Create ***");
 	
 	if(Neo4JNodes.get(nodeName)==null) {
@@ -146,7 +145,7 @@ private boolean NodePropertiesCreate(String nodeName) throws ServiceException{
 		Response resp = client.target(BaseURI+"/node").request(MediaType.APPLICATION_XML).post(Entity.entity(node,MediaType.APPLICATION_XML),Response.class);
 		
 		if(resp.getStatus()!=201)
-			throw new ServiceException("Node not create " + resp.getStatus() + " URI: " + BaseURI);
+			throw new Exception("Node not create " + resp.getStatus() + " URI: " + BaseURI);
 
 		node.setId(resp.readEntity(Node.class).getId());
 		
@@ -154,7 +153,7 @@ private boolean NodePropertiesCreate(String nodeName) throws ServiceException{
 		resp = client.target(BaseURI+"/node/"+ node.getId()  +"/labels").request(MediaType.APPLICATION_XML).post(Entity.entity(labels,MediaType.APPLICATION_XML),Response.class);
 		
 		if(resp.getStatus()!=204)
-			throw new ServiceException("Label is not created" + resp.getStatus());
+			throw new Exception("Label is not created" + resp.getStatus());
 		
 		/*aggiorno la mappa*/
 		Neo4JNodes.put(name_property.getValue(), node);
@@ -173,7 +172,7 @@ private boolean NodePropertiesCreate(String nodeName) throws ServiceException{
 }
 
 
-private void NodeLinkRel(String srcNode, String destNode) throws ServiceException{
+private void NodeLinkRel(String srcNode, String destNode) throws Exception{
 	
 	System.out.println("*** Init Node Link Rel ***");
 	
@@ -185,12 +184,12 @@ private void NodeLinkRel(String srcNode, String destNode) throws ServiceExceptio
      resp = client.target(BaseURI+"/node/"+Neo4JNodes.get(srcNode).getId()+"/relationships").request(MediaType.APPLICATION_XML).post(Entity.entity(rel,MediaType.APPLICATION_XML),Response.class);
 
     if ((resp.getStatus() != 200) && (resp.getStatus() != 201)) {
-        throw new ServiceException("Error creating relationship");
+        throw new Exception("Error creating relationship");
     }
     System.out.println("*** End Node Link Rel ***");
 }
 
-private void HostPropertiesCreate(String hostName) throws ServiceException{
+private void HostPropertiesCreate(String hostName) throws Exception{
 	System.out.println("*** Init Host Properties Create ***");
 		
 		if(Neo4JHost.get(hostName) == null) {
@@ -216,7 +215,7 @@ private void HostPropertiesCreate(String hostName) throws ServiceException{
 		Response resp = client.target(BaseURI+"/node").request(MediaType.APPLICATION_XML).post(Entity.entity(node,MediaType.APPLICATION_XML),Response.class);
 		
 		if(resp.getStatus()!=201)
-			throw new ServiceException("Node not create" + resp.getStatus());
+			throw new Exception("Node not create" + resp.getStatus());
 
 		node.setId(resp.readEntity(Node.class).getId());
 
@@ -224,7 +223,7 @@ private void HostPropertiesCreate(String hostName) throws ServiceException{
 		resp = client.target(BaseURI+"/node/"+ node.getId()  +"/labels").request(MediaType.APPLICATION_XML).post(Entity.entity(labels,MediaType.APPLICATION_XML),Response.class);
 		
 		if(resp.getStatus()!=204)
-			throw new ServiceException("Label is not created" + resp.getStatus());
+			throw new Exception("Label is not created" + resp.getStatus());
 		
 		/*aggiorno la mappa*/
 		Neo4JHost.put(name_property.getValue(), node);
@@ -235,7 +234,7 @@ private void HostPropertiesCreate(String hostName) throws ServiceException{
 
 }
 
-private void NodeHostRel(String srcNode, String destNode) throws ServiceException{
+private void NodeHostRel(String srcNode, String destNode) throws Exception{
 	
 	System.out.println("*** Init Node Host Relationship ***");
 
@@ -247,7 +246,7 @@ private void NodeHostRel(String srcNode, String destNode) throws ServiceExceptio
      resp = client.target(BaseURI+"/node/"+Neo4JNodes.get(srcNode).getId()+"/relationships").request(MediaType.APPLICATION_XML).post(Entity.entity(rel,MediaType.APPLICATION_XML),Response.class);
 
     if ((resp.getStatus() != 200) && (resp.getStatus() != 201)) {
-        throw new ServiceException("Error creating relationship");
+        throw new Exception("Error creating relationship");
     }
     System.out.println("*** End Node Host Relationship ***");
 }
@@ -354,7 +353,7 @@ public Collection<PerformanceImpl> getPerformance() {
  * @throws ServiceException 
  */
 
-public Collection<HostImpl> getReachableHosts(String id) throws ServiceException{
+public Collection<HostImpl> getReachableHosts(String id) throws Exception{
 	
 	Node node = new Node();
 	HostImpl hostimpl = new HostImpl();	
@@ -366,7 +365,7 @@ public Collection<HostImpl> getReachableHosts(String id) throws ServiceException
 	Response resp = client.target(BaseURI+"/node/"+ node.getId() + "/reachableNodes?relationshipTypes=ForwardsTo&NodeLabel=Node").request(MediaType.APPLICATION_XML).get(Response.class);
 	
 	if(resp.getStatus()!= 200)
-		throw new ServiceException("getExtendedNodes Failed");
+		throw new Exception("getExtendedNodes Failed");
 
 	List<Node> list_node = resp.readEntity(new GenericType<List<Node>>(){});
 	
@@ -394,7 +393,7 @@ public Collection<HostImpl> getReachableHosts(String id) throws ServiceException
  * @addNode
  */
 
-public boolean loadNode(NffgImpl nffg , NodeImpl node, String hostname) throws NfvReaderException, ServiceException {
+public boolean loadNode(NffgImpl nffg , NodeImpl node, String hostname) throws NfvReaderException, Exception {
 	
 	HostImpl host = hostmap_appoggio.get(hostname);
 	
@@ -445,7 +444,7 @@ public boolean loadNode(NffgImpl nffg , NodeImpl node, String hostname) throws N
 	
 }
 
-public String searchHost() throws NfvReaderException, ServiceException {
+public String searchHost() throws NfvReaderException, Exception {
 	Random       random       = new Random();
 	List<String> keys         = new ArrayList<String>(Neo4JDB.hostmap_appoggio.keySet());
 	String       randomKey    = keys.get( random.nextInt(keys.size()) );
@@ -456,7 +455,7 @@ public String searchHost() throws NfvReaderException, ServiceException {
 	return host.getHostName();
 }
 
-public void reloadNode(NffgImpl nffg, NodeImpl node) throws ServiceException {
+public void reloadNode(NffgImpl nffg, NodeImpl node) throws Exception {
 	
 	System.out.println("** Reload Node Start **");
 	
@@ -480,7 +479,7 @@ public void reloadNode(NffgImpl nffg, NodeImpl node) throws ServiceException {
 	   }
 }
 
-public boolean checkLink(String nffgname,LinkImpl link) throws ServiceException{
+public boolean checkLink(String nffgname,LinkImpl link){
 	
 	System.out.println("** Init checkLink **");
 	
@@ -505,7 +504,7 @@ public boolean checkLink(String nffgname,LinkImpl link) throws ServiceException{
 	return false;
 }
 
-public LinkImpl loadLink(NffgImpl nffg, LinkImpl link) throws ServiceException {
+public LinkImpl loadLink(NffgImpl nffg, LinkImpl link) throws Exception{
 	
 	System.out.println("** Init loadLink **");
 	

@@ -16,7 +16,7 @@ import it.polito.dp2.NFV.NfvReaderFactory;
 import it.polito.dp2.NFV.NodeReader;
 import it.polito.dp2.NFV.VNFTypeReader;
 
-import it.polito.dp2.NFV.lab3.ServiceException;
+
 import it.polito.dp2.NFV.ConnectionPerformanceReader;
 import it.polito.dp2.NFV.HostReader;
 import it.polito.dp2.NFV.LinkReader;
@@ -53,7 +53,7 @@ public class NfvDeployer {
 	
 	
 	
-	public void serializer() throws DatatypeConfigurationException, ServiceException, NfvReaderException {
+	public void serializer() throws DatatypeConfigurationException, NfvReaderException, Exception {
 		
 		serializerHost();
 		serializerPerformance();
@@ -137,7 +137,7 @@ private void serializerVnf() {
 	System.out.println("** Finish VNF Serializer **");
 }
 
-private void serializerNffg(String nffg0) throws DatatypeConfigurationException, ServiceException, NfvReaderException{
+private void serializerNffg(String nffg0) throws Exception{
 	
 	System.out.println("** Start Nffg Serializer **");
 	

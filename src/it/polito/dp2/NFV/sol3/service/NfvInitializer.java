@@ -3,13 +3,12 @@ package it.polito.dp2.NFV.sol3.service;
 import javax.xml.datatype.DatatypeConfigurationException;
 
 import it.polito.dp2.NFV.NfvReaderException;
-import it.polito.dp2.NFV.lab3.ServiceException;
 
 public class NfvInitializer {
 
 	private static NfvInitializer nfvInit = null;
 	
-	public static NfvInitializer newInstance() throws NfvReaderException, DatatypeConfigurationException, ServiceException{
+	public static NfvInitializer newInstance() throws NfvReaderException, DatatypeConfigurationException, Exception{
 		if(nfvInit == null) {
 			nfvInit = new NfvInitializer();
 			init();
@@ -20,7 +19,7 @@ public class NfvInitializer {
 	private NfvInitializer(){
 	}
 	
-	private static void init() throws NfvReaderException, DatatypeConfigurationException, ServiceException {
+	private static void init() throws NfvReaderException, DatatypeConfigurationException, Exception {
 		NfvDeployer dev = new NfvDeployer();
 		dev.serializer();
 	}

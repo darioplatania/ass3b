@@ -6,7 +6,6 @@ import javax.xml.datatype.DatatypeConfigurationException;
 
 import io.swagger.annotations.*;
 import it.polito.dp2.NFV.NfvReaderException;
-import it.polito.dp2.NFV.lab3.LinkAlreadyPresentException;
 import it.polito.dp2.NFV.lab3.ServiceException;
 import it.polito.dp2.NFV.sol3.jaxb.*;
 
@@ -20,7 +19,7 @@ public class NfvResources {
 	
 	private static boolean loadnffg = false;
 	
-	public NfvResources() throws DatatypeConfigurationException, ServiceException, NfvReaderException{
+	public NfvResources() throws DatatypeConfigurationException, Exception, NfvReaderException{
 		//nfvInitializer = NfvInitializer.newInstance();
 		
 		if(neo4j == null)
@@ -106,6 +105,7 @@ public class NfvResources {
 	/** 
 	 * This method allows to get reachablehosts by existed node stored in the NffgService 
 	 * @return  the reachablehosts stored in the service
+	 * @throws Exception 
 	 * @throws ServiceException 
 	 */
 	@GET
@@ -116,8 +116,8 @@ public class NfvResources {
 			@ApiResponse(code = 500, message = "Internal Server Error")
 	})
     @Produces(MediaType.APPLICATION_XML)
-	public HostC getReachableHosts(@PathParam("id") String id){
-		try {
+	public HostC getReachableHosts(@PathParam("id") String id) throws Exception{
+		//try {
 			
 		NodeImpl node  = neo4j.getNode(id);
 		if(node == null)
@@ -128,9 +128,9 @@ public class NfvResources {
 	
 		return retval;
 		
-		}catch(ServiceException e) {
-			throw new InternalServerErrorException();
-		}
+		//}catch(ServiceException e) {
+			//throw new InternalServerErrorException();
+		//}
 
 	}
 	
@@ -200,6 +200,7 @@ public class NfvResources {
 	/** 
 	 * This method allows to add a whole NFFG 
 	 * @param the Nffg to store in the service
+	 * @throws Exception 
 	 * @throws NfvReaderException 
 	 * @throws InternalServerErrorException
 	 * @throws ForbiddenException
@@ -213,10 +214,10 @@ public class NfvResources {
 			@ApiResponse(code = 403, message = "Forbidden"),
 			@ApiResponse(code = 500, message = "Internal Server Error")
 	})	
-	public NffgImpl addNffg(NffgImpl nffg){
+	public NffgImpl addNffg(NffgImpl nffg) throws Exception{
 		//serviceException & NfvReaderException le uso la prima nella create node e la seconda nei check dell'host
 		
-		try{
+		//try{
 			synchronized(Neo4JDB.getSynchObject()) {
 				
 				//vedo se nell'xml esiste il nome della nffg
@@ -265,15 +266,16 @@ public class NfvResources {
 				
 			}
 			// neo4j.loadnffg(nffg);
-		}catch(NfvReaderException | ServiceException e){
-				throw new InternalServerErrorException();
+		}//catch(NfvReaderException | ServiceException e){
+				//throw new InternalServerErrorException();
 			
-		}	           		
-	}
+		//}	           		
+	//}
 	
 	/**
 	 * This method allows to add a node in the NFFg
 	 * @param the Nffg and Node
+	 * @throws Exception 
 	 * @throws NfvReaderException 
 	 * @throws NotFoundException
 	 * @throws ForbiddenException
@@ -290,9 +292,9 @@ public class NfvResources {
 			@ApiResponse(code = 404, message = "Not Found"),
 			@ApiResponse(code = 500, message = "Internal Server Error")
 	})
-	public NodeImpl addNode(@PathParam("id") String id, NodeImpl node){
+	public NodeImpl addNode(@PathParam("id") String id, NodeImpl node) throws Exception{
 		
-		try {
+		//try {
 			synchronized(Neo4JDB.getSynchObject()) {
 
 				if (!Neo4JDB.nffgs.containsKey(id))
@@ -348,17 +350,17 @@ public class NfvResources {
 			}
 
 
-		} catch (NfvReaderException | ServiceException e) {
-			throw new InternalServerErrorException();
-		}
+		} //catch (NfvReaderException | ServiceException e) {
+			//throw new InternalServerErrorException();
+		//}
 
        
-}
+//}
 	
 	/**
 	 * This method allows to add a link in the NFFg
-	 * @param the Nffg and Node
-	 * @throws LinkAlreadyPresentException 
+	 * @param the Nffg and Node 
+	 * @throws Exception 
 	 * @throws NfvReaderException 
 	 * @throws NotFoundException
 	 * @throws ForbiddenException
@@ -375,8 +377,8 @@ public class NfvResources {
 			@ApiResponse(code = 404, message = "Not Found"),
 			@ApiResponse(code = 500, message = "Internal Server Error")
 	})
-	public LinkImpl addLink(@PathParam("id") String id, LinkImpl link){
-	try {
+	public LinkImpl addLink(@PathParam("id") String id, LinkImpl link) throws Exception{
+	//try {
 		
 		synchronized(Neo4JDB.getSynchObject()) {
 
@@ -430,7 +432,7 @@ public class NfvResources {
 				if(!link.isOverwrite()) {
 					//flag false quindi eccezione
 					System.out.println("Flag false---eccezione");
-					throw new LinkAlreadyPresentException();	
+					throw new ForbiddenException();	
 				}
 				else {
 			    System.out.println("Flag true");
@@ -451,11 +453,11 @@ public class NfvResources {
 			}
 		}
 	}
-	catch(ServiceException | LinkAlreadyPresentException e) {
-		throw new ForbiddenException();	
-	}
+	//catch(ServiceException | LinkAlreadyPresentException e) {
+		//throw new ForbiddenException();	
+	//}
 		
-	}
+	//}
 	
 	
 	@DELETE
