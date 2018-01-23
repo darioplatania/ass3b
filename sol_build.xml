@@ -8,8 +8,7 @@
 	<property name="ext.lib.dir" location="/opt/dp2/shared/lib"/>
 	<property name="schema.dir" location="${basedir}/xsd" />
 	<property name="lib.dir" location="${basedir}/lib" />
-	<property name="PORT" value="8080"></property>
-	<property name="negotiate.wadl" value="http://localhost:${PORT}/Neo4JSimpleXML/webapi/application.wadl" />
+	<property name="negotiate.wadl" value="http://localhost:${tomcatPort}/Neo4JSimpleXML/webapi/application.wadl" />
 	<property name="path.prefix" value="it/polito/dp2/NFV/sol3" />
 	
 	<!-- Java compiler settings -->

@@ -1,14 +1,17 @@
 package it.polito.dp2.NFV.sol3.service;
 
+import java.net.URI;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriBuilder;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
@@ -25,7 +28,9 @@ public class Neo4JDB {
 	
 	private Catalog 	catalogimpl = new Catalog();
 	private String BaseURI;
+	private String url;
 	private Client client;
+	private WebTarget target;
 	private Response resp;
 	
 	//private NfvDeployer nfv;
@@ -46,14 +51,27 @@ public class Neo4JDB {
      // create the basic URL as a String
 	BaseURI = System.getProperty(PROPERTY);
 
-     if (BaseURI == null)
+   /*  if (BaseURI == null)
          BaseURI = "http://localhost:8080/Neo4JSimpleXML/webapi/data";
     else
-     	BaseURI+="/data";
-
-
-     /*Init Client*/
+     	BaseURI+="/data";*/
+	
+	if(BaseURI == null || BaseURI.equals("")) {
+		BaseURI = "http://localhost:8080/Neo4JSimpleXML/rest/data";
+	}
+	 else
+	     	BaseURI+="/data";
+	
+	url = BaseURI;
+	
+	/*Init Client*/
 	client = ClientBuilder.newClient();
+	target = client.target(getBaseURI(BaseURI));
+	
+	}
+	
+	private static URI getBaseURI(String url) {
+		return UriBuilder.fromUri(url).build();
 	}
 
 public static Object getSynchObject(){
