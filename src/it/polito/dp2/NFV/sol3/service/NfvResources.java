@@ -386,17 +386,17 @@ public class NfvResources {
 				throw new NotFoundException("Nffg Not Found!"); // Nffg Not Found
 			
 			if(link.getLinkName() == null || link.getLinkName().equals(""))
-				throw new ForbiddenException("LinkName Problems");
+				throw new NotFoundException("LinkName Problems");
 			if(link.getSourceNode() == null || link.getLinkName().equals(""))
-				throw new ForbiddenException("SourceNode Problems");
+				throw new NotFoundException("SourceNode Problems");
 			if(link.getDestinationNode() == null || link.getLinkName().equals(""))
-				throw new ForbiddenException("DestNode Problems");	
+				throw new NotFoundException("DestNode Problems");	
 			
 			if (!Neo4JDB.Nodes.containsKey(link.getSourceNode()))
-				throw new ForbiddenException("SourceNode non presente nella mappa"); // SourceNode not Found
+				throw new NotFoundException("SourceNode non presente nella mappa"); // SourceNode not Found
 			
 			if (!Neo4JDB.Nodes.containsKey(link.getDestinationNode()))
-				throw new ForbiddenException("DestNode non presente nella mappa"); // DestionationNode not Found
+				throw new NotFoundException("DestNode non presente nella mappa"); // DestionationNode not Found
 			
 			
 			NffgImpl nffg = Neo4JDB.nffgs.get(id);

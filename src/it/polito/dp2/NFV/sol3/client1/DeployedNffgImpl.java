@@ -144,7 +144,7 @@ public class DeployedNffgImpl implements DeployedNffg{
 		// Request for posting the Link
 		resp = client.target(BaseURI + "/np/" + nffgimpl.getNameNffg() + "/addLink").request(MediaType.APPLICATION_XML).post(Entity.entity(link, MediaType.APPLICATION_XML), Response.class);	
 		
-		if(resp.getStatus() == 400)
+		if(resp.getStatus() == 404)
 			throw new NoNodeException("Nodo non presente");
 		if(resp.getStatus() == 500)
 			throw new ServiceException("Post addLink Client1 Error " + resp.getStatus());
