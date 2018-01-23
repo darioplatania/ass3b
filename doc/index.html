@@ -1,455 +1,248 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!doctype html>
 <html>
-<head>
-	<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
-	<title></title>
-	<meta name="generator" content="LibreOffice 5.1.6.2 (Linux)"/>
-	<meta name="created" content="2018-01-22T18:32:56.825155122"/>
-	<meta name="changed" content="2018-01-22T19:47:26.958767977"/>
-	<style type="text/css">
-		@page { margin: 2cm }
-		p { margin-bottom: 0.25cm; direction: ltr; color: #000000; line-height: 120%; orphans: 2; widows: 2 }
-		p.western { font-family: "Liberation Serif", "Times New Roman", serif; font-size: 12pt; so-language: it-IT }
-		p.cjk { font-family: "Noto Sans CJK SC Regular"; font-size: 12pt; so-language: zh-CN }
-		p.ctl { font-family: "FreeSans"; font-size: 12pt; so-language: hi-IN }
-		td p { margin-bottom: 0cm; direction: ltr; color: #000000; orphans: 2; widows: 2 }
-		td p.western { font-family: "Liberation Serif", "Times New Roman", serif; font-size: 12pt; so-language: it-IT }
-		td p.cjk { font-family: "Noto Sans CJK SC Regular"; font-size: 12pt; so-language: zh-CN }
-		td p.ctl { font-family: "FreeSans"; font-size: 12pt; so-language: hi-IN }
-		a:link { so-language: zxx }
-	</style>
-</head>
-<body lang="it-IT" text="#000000" dir="ltr">
+<body>
+<div style="text-align: center;"><strong><strong>RESTFul NFV SERVICE DETAILED API DESCRIPTION</strong></strong>
 
-<h3>Student: Dario Platania(s230094) A.A. 2017/18</h3>
+<br /><br />
 
-<p align="center"><strong>Resources Structure</strong></p>
+<div><br/><br/></div>
+<table border="1" style="border-collapse: collapse; width: 100%; height: 526px;">
+<tbody>
+<tr style="height: 61px;">
+<td style="width: 19.800995024875625%; height: 61px;">
+<div style="text-align: center;"><strong>URI</strong></div>
+</td>
+<td style="width: 13.532338308457712%; text-align: center; height: 61px;"><strong>ALLOWED HTTP</strong><br /><strong>METHOD</strong></td>
+<td style="width: 16.666666666666668%; text-align: center; height: 61px;"><strong>ALLOWED XML</strong><br /><strong>ELEMENT</strong></td>
+<td style="width: 16.666666666666668%; text-align: center; height: 61px;"><strong>RESPONSE</strong><br /><strong>BODY</strong></td>
+<td style="width: 16.965174129353237%; text-align: center; height: 61px;"><strong>OPERATION</strong><br /><strong>DESCRIPTON</strong></td>
+<td style="width: 16.3681592039801%; text-align: center; height: 61px;"><strong>TYPE</strong></td>
+</tr>
+<tr style="height: 21px;">
+<td style="width: 19.800995024875625%; height: 21px;">/np/nffgs</td>
+<td style="width: 13.532338308457712%; height: 21px;">GET</td>
+<td style="width: 16.666666666666668%; text-align: center; height: 21px;">-</td>
+<td style="width: 16.666666666666668%; height: 21px;">NFFGs</td>
+<td style="width: 16.965174129353237%; height: 21px;">Get list of Nffg</td>
+<td style="width: 16.3681592039801%; height: 21px;">Read Only</td>
+</tr>
+<tr style="height: 41px;">
+<td style="width: 19.800995024875625%; height: 41px;">/np/nffgs/{id}</td>
+<td style="width: 13.532338308457712%; height: 41px;">GET</td>
+<td style="width: 16.666666666666668%; height: 41px;"></td>
+<td style="width: 16.666666666666668%; height: 41px;">NFFGs</td>
+<td style="width: 16.965174129353237%; height: 41px;">Get a single Nffg</td>
+<td style="width: 16.3681592039801%; height: 41px;">Read Only</td>
+</tr>
+<tr style="height: 21px;">
+<td style="width: 19.800995024875625%; height: 21px;">/np/nodes/{id}</td>
+<td style="width: 13.532338308457712%; height: 21px;">GET</td>
+<td style="width: 16.666666666666668%; text-align: center; height: 21px;">-</td>
+<td style="width: 16.666666666666668%; height: 21px;">NODE</td>
+<td style="width: 16.965174129353237%; height: 21px;">Get Node by id</td>
+<td style="width: 16.3681592039801%; height: 21px;">Read Only</td>
+</tr>
+<tr style="height: 61px;">
+<td style="width: 19.800995024875625%; height: 61px;">/np/nodes/{id}/<br />reachablehosts</td>
+<td style="width: 13.532338308457712%; height: 61px;">GET</td>
+<td style="width: 16.666666666666668%; text-align: center; height: 61px;">-</td>
+<td style="width: 16.666666666666668%; height: 61px;">HOSTs</td>
+<td style="width: 16.965174129353237%; height: 61px;">Get reachable hosts by existed node</td>
+<td style="width: 16.3681592039801%; height: 61px;">Read Only</td>
+</tr>
+<tr style="height: 61px;">
+<td style="width: 19.800995024875625%; height: 61px;">/np/hosts</td>
+<td style="width: 13.532338308457712%; height: 61px;">GET</td>
+<td style="width: 16.666666666666668%; text-align: center; height: 61px;">-</td>
+<td style="width: 16.666666666666668%; height: 61px;">HOSTs</td>
+<td style="width: 16.965174129353237%; height: 61px;">Get to Hosts&nbsp;<br />stored in the Nffg</td>
+<td style="width: 16.3681592039801%; height: 61px;">Read Only</td>
+</tr>
+<tr style="height: 41px;">
+<td style="width: 19.800995024875625%; height: 41px;">/np/catalog</td>
+<td style="width: 13.532338308457712%; height: 41px;">GET</td>
+<td style="width: 16.666666666666668%; text-align: center; height: 41px;">-</td>
+<td style="width: 16.666666666666668%; height: 41px;">CATALOG</td>
+<td style="width: 16.965174129353237%; height: 41px;">Get functional<br />type</td>
+<td style="width: 16.3681592039801%; height: 41px;">Read Only</td>
+</tr>
+<tr style="height: 41px;">
+<td style="width: 19.800995024875625%; height: 41px;">/np/performances</td>
+<td style="width: 13.532338308457712%; height: 41px;">GET</td>
+<td style="width: 16.666666666666668%; text-align: center; height: 41px;">-</td>
+<td style="width: 16.666666666666668%; height: 41px;">PERFORMANCE</td>
+<td style="width: 16.965174129353237%; height: 41px;">Get performance</td>
+<td style="width: 16.3681592039801%; height: 41px;">Read Only</td>
+</tr>
+<tr style="height: 41px;">
+<td style="width: 19.800995024875625%; height: 41px;">/np/addNffg</td>
+<td style="width: 13.532338308457712%; height: 41px;">POST</td>
+<td style="width: 16.666666666666668%; height: 41px;">NFFG</td>
+<td style="width: 16.666666666666668%; height: 41px;">NFFG</td>
+<td style="width: 16.965174129353237%; height: 41px;">Insert 1 or more Nffg</td>
+<td style="width: 16.3681592039801%; height: 41px;">Read Only</td>
+</tr>
+<tr style="height: 41px;">
+<td style="width: 19.800995024875625%; height: 41px;">/np/{id}/addNode</td>
+<td style="width: 13.532338308457712%; height: 41px;">POST</td>
+<td style="width: 16.666666666666668%; height: 41px;">NODE</td>
+<td style="width: 16.666666666666668%; height: 41px;">NODE</td>
+<td style="width: 16.965174129353237%; height: 41px;">Insert 1 or more Node</td>
+<td style="width: 16.3681592039801%; height: 41px;">Idempotent</td>
+</tr>
+<tr style="height: 41px;">
+<td style="width: 19.800995024875625%; height: 41px;">/np/{id}/addLink</td>
+<td style="width: 13.532338308457712%; height: 41px;">POST</td>
+<td style="width: 16.666666666666668%; height: 41px;">LINK</td>
+<td style="width: 16.666666666666668%; height: 41px;">LINK</td>
+<td style="width: 16.965174129353237%; height: 41px;">Insert 1 or more Link</td>
+<td style="width: 16.3681592039801%; height: 41px;">Idempotent</td>
+</tr>
+<tr style="height: 41px;">
+<td style="width: 19.800995024875625%; height: 41px;">/np/{id}/delNode</td>
+<td style="width: 13.532338308457712%; height: 41px;">DELETE</td>
+<td style="width: 16.666666666666668%; text-align: center; height: 41px;">-</td>
+<td style="width: 16.666666666666668%; text-align: center; height: 41px;">-</td>
+<td style="width: 16.965174129353237%; text-align: center; height: 41px;">-</td>
+<td style="width: 16.3681592039801%; height: 41px;">Not Implemented</td>
+</tr>
+<tr style="height: 41px;">
+<td style="width: 19.800995024875625%; height: 41px;">/np/{id}/delLink</td>
+<td style="width: 13.532338308457712%; height: 41px;">DELETE</td>
+<td style="width: 16.666666666666668%; text-align: center; height: 41px;">-</td>
+<td style="width: 16.666666666666668%; text-align: center; height: 41px;">-</td>
+<td style="width: 16.965174129353237%; text-align: center; height: 41px;">-</td>
+<td style="width: 16.3681592039801%; height: 41px;">Not Implemented</td>
+</tr>
+</tbody>
+</table>
+<br><br>
+<p>NB: All the URI starts with the common URL http://localhost:8080/NfvDeployer/rest/</p>
+
+<div style="text-align: center;"><strong><strong>HTTP RESPONSE CODE<br /><br /></strong></strong>
+<table border="1" style="border-collapse: collapse; width: 100%;">
+<tbody>
+<tr style="height: 21px;">
+<td style="width: 25%; text-align: center; height: 21px;"><strong>METHOD</strong></td>
+<td style="width: 25%; text-align: center; height: 21px;"><strong>HTTP CODE</strong></td>
+<td style="width: 25%; text-align: center; height: 21px;"><strong>MEANING</strong></td>
+</tr>
+<tr style="height: 121px;">
+<td style="width: 25%; height: 121px;">GET</td>
+<td style="width: 25%; height: 121px;">200-OK<br /><br />404-Not Found<br /><br />500-Internal Server Error</td>
+<td style="width: 25%; height: 121px;">Data Correctly Retrived<br /><br />Data Not Found<br /><br />Internal Server Error<br /><br /></td>
+</tr>
+<tr style="height: 21px;">
+<td style="width: 25%; height: 21px;">POST</td>
+<td style="width: 25%; height: 21px;">201-OK<br /><br /><br /><br />403-Bad Request<br /><br />500-Internal Server Error<br /><br /><br /></td>
+<td style="width: 25%; height: 21px;">Correct Creation Resource<br /><br /><br /><br />XML given in the request body is not well formed<br /><br />Internal Server Error<br /><br /><br /></td>
+</tr>
+</tbody>
+</table>
+<strong><br /><br /><br /></strong></div>
+
+
+<p align="center"><strong>RESOURCES STRUCTURE</strong></p>
 <p align="left">&nbsp;</p>
 <p align="left"><span style="font-family: monospace;"><span style="font-size: small;"><strong>NP</strong></span></span></p>
 <p align="left"><span style="font-family: monospace;"><span style="font-size: small;">|</span></span></p>
-<p align="left"><span style="font-family: monospace;"><span style="font-size: small;">|---NFFG* (nffgName, deployTime)</span></span></p>
+<p align="left"><span style="font-family: monospace;"><span style="font-size: small;">|---NFFG* (name_nffg, deploy_time)</span></span></p>
 <p align="left"><span style="font-family: monospace;"><span style="font-size: small;">| &nbsp; &nbsp;|</span></span></p>
-<p align="left"><span style="font-family: monospace;"><span style="font-size: small;">| &nbsp; &nbsp;|--- NODE* (nodeName, hostName)</span></span></p>
+<p align="left"><span style="font-family: monospace;"><span style="font-size: small;">| &nbsp; &nbsp;|--- NODE* (node_name, host_name,nffg_rif,functionaltypeId)</span></span></p>
 <p align="left"><span style="font-family: monospace;"><span style="font-size: small;">| &nbsp; &nbsp;| &nbsp; &nbsp; &nbsp;|</span></span></p>
-<p align="left"><span style="font-family: monospace;"><span style="font-size: small;">| &nbsp; &nbsp;| &nbsp; &nbsp; &nbsp;|--- LINK* (linkName, sourceNode, destinationNode, &nbsp;</span></span><span style="font-family: monospace;"><span style="font-size: small;">minimumTroughput, maximumLatency, bool)</span></span></p>
+<p align="left"><span style="font-family: monospace;"><span style="font-size: small;">| &nbsp; &nbsp;| &nbsp; &nbsp; &nbsp;|--- LINK* (link_name, sourceNode, destinationNode, &nbsp;</span></span><span style="font-family: monospace;"><span style="font-size: small;">min_throughput, max_latency, overwrite)</span></span></p>
 <p align="left"><span style="font-family: monospace;"><span style="font-size: small;">|</span></span></p>
 <p align="left"><span style="font-family: monospace;"><span style="font-size: small;">|--- IN</span></span></p>
 <p align="left"><span style="font-family: monospace;"><span style="font-size: small;">| &nbsp; &nbsp; |</span></span></p>
-<p align="left"><span style="font-family: monospace;"><span style="font-size: small;">| &nbsp; &nbsp; |--- HOST* (hostName, hostName, maximumNumberOfVNFs, memory,&nbsp;</span></span><span style="font-family: monospace;"><span style="font-size: small;">diskStorage)</span></span></p>
+<p align="left"><span style="font-family: monospace;"><span style="font-size: small;">| &nbsp; &nbsp; |--- HOST* (host_name, number_VNFs, memory,&nbsp;</span></span><span style="font-family: monospace;"><span style="font-size: small;">diskStorage)</span></span></p>
 <p align="left"><span style="font-family: monospace;"><span style="font-size: small;">| &nbsp; &nbsp; | </span></span></p>
 <p align="left"><span style="font-family: monospace;"><span style="font-size: small;">| &nbsp; &nbsp; |--- PERFORMANCE (averageThroughput, latency, sourceHost,&nbsp;</span></span><span style="font-family: monospace;"><span style="font-size: small;">destinationHost)</span></span></p>
 <p align="left"><span style="font-family: monospace;"><span style="font-size: small;">|</span></span></p>
 <p align="left"><span style="font-family: monospace;"><span style="font-size: small;">|--- CATALOG</span></span></p>
 <p align="left"><span style="font-family: monospace;"><span style="font-size: small;">| &nbsp; &nbsp; &nbsp; |</span></span></p>
-<p align="left"><span style="font-family: monospace;"><span style="font-size: small;">| &nbsp; &nbsp; &nbsp; |--- FUNCTIONALTYPE* (funcTypeName, requiredMemory, requiredStorage)</span></span></p>
+<p align="left"><span style="font-family: monospace;"><span style="font-size: small;">| &nbsp; &nbsp; &nbsp; |--- FUNCTIONALTYPE* (functionaltypeId,functionalTypeName, required_memory, required_storage)</span></span></p>
 <p align="left">&nbsp;</p>
 <p align="left">&nbsp;</p>
 <p align="left">&nbsp;</p>
 <p align="left"><span style="font-family: monospace;"><span style="font-size: small;"><strong>NFFGs </strong></span></span><span style="font-family: monospace;"><span style="font-size: small;">?</span></span></p>
 <p align="left"><span style="font-family: monospace;"><span style="font-size: small;">|</span></span></p>
-<p align="left"><span style="font-family: monospace;"><span style="font-size: small;">|---NFFG* (nffgName, deployTime)</span></span></p>
+<p align="left"><span style="font-family: monospace;"><span style="font-size: small;">|---NFFG* (name_nffg, deploy_time)</span></span></p>
 <p align="left"><span style="font-family: monospace;"><span style="font-size: small;">| &nbsp; &nbsp;|</span></span></p>
-<p align="left"><span style="font-family: monospace;"><span style="font-size: small;">| &nbsp; &nbsp;|--- NODE* (nodeName, hostName)</span></span></p>
+<p align="left"><span style="font-family: monospace;"><span style="font-size: small;">| &nbsp; &nbsp;|--- NODE* (node_name, host_name,nffg_rif,functionaltypeId)</span></span></p>
 <p align="left"><span style="font-family: monospace;"><span style="font-size: small;">| &nbsp; &nbsp;| &nbsp; &nbsp; |</span></span></p>
-<p align="left"><span style="font-family: monospace;"><span style="font-size: small;">| &nbsp; &nbsp;| &nbsp; &nbsp; |--- LINK* (linkName, sourceNode, destinationNode, </span></span><span style="font-family: monospace;"><span style="font-size: small;">minimumTroughput, maximumLatency, bool)</span></span></p>
+<p align="left"><span style="font-family: monospace;"><span style="font-size: small;">| &nbsp; &nbsp;| &nbsp; &nbsp; |--- LINK* (link_name, sourceNode, destinationNode, </span></span><span style="font-family: monospace;"><span style="font-size: small;">min_throughput, max_latency, overwrite)</span></span></p>
 <p align="left">&nbsp;</p>
 <p align="left">&nbsp;</p>
-<p align="left"><span style="font-family: monospace;"><span style="font-size: small;"><strong>NFFG</strong></span></span><span style="font-family: monospace;"><span style="font-size: small;">* (nffgName, deployTime)</span></span></p>
+<p align="left"><span style="font-family: monospace;"><span style="font-size: small;"><strong>NFFG</strong></span></span><span style="font-family: monospace;"><span style="font-size: small;">* (name_nffg, deploy_time)</span></span></p>
 <p align="left"><span style="font-family: monospace;"><span style="font-size: small;">| </span></span></p>
-<p align="left"><span style="font-family: monospace;"><span style="font-size: small;">|--- NODE* (nodeName, hostName)</span></span></p>
+<p align="left"><span style="font-family: monospace;"><span style="font-size: small;">|--- NODE* (node_name, host_name,nffg_rif,functionaltypeId)</span></span></p>
 <p align="left"><span style="font-family: monospace;"><span style="font-size: small;">| &nbsp; &nbsp; |</span></span></p>
-<p align="left"><span style="font-family: monospace;"><span style="font-size: small;">| &nbsp; &nbsp; |--- LINK* (linkName, sourceNode, destinationNode, </span></span><span style="font-family: monospace;"><span style="font-size: small;">minimumTroughput, maximumLatency, bool)</span></span></p>
+<p align="left"><span style="font-family: monospace;"><span style="font-size: small;">| &nbsp; &nbsp; |--- LINK* (link_name, sourceNode, destinationNode, </span></span><span style="font-family: monospace;"><span style="font-size: small;">min_throughput, max_latency, overwrite)</span></span></p>
 <p align="left">&nbsp;</p>
 <p align="left">&nbsp;</p>
 <p align="left"><span style="font-family: monospace;"><span style="font-size: small;"><strong>NODEs </strong></span></span><span style="font-family: monospace;"><span style="font-size: small;">?</span></span></p>
 <p align="left"><span style="font-family: monospace;"><span style="font-size: small;">| </span></span></p>
-<p align="left"><span style="font-family: monospace;"><span style="font-size: small;">|--- NODE* (nodeName, hostName)</span></span></p>
+<p align="left"><span style="font-family: monospace;"><span style="font-size: small;">|--- NODE* (node_name, host_name,nffg_rif,functionaltypeId)</span></span></p>
 <p align="left"><span style="font-family: monospace;"><span style="font-size: small;">| &nbsp; &nbsp; |</span></span></p>
-<p align="left"><span style="font-family: monospace;"><span style="font-size: small;">| &nbsp; &nbsp; |--- LINK* (linkName, sourceNode, destinationNode, </span></span><span style="font-family: monospace;"><span style="font-size: small;">minimumTroughput, maximumLatency, bool)</span></span></p>
+<p align="left"><span style="font-family: monospace;"><span style="font-size: small;">| &nbsp; &nbsp; |--- LINK* (link_name, sourceNode, destinationNode, </span></span><span style="font-family: monospace;"><span style="font-size: small;">min_throughput, max_latency, overwrite)</span></span></p>
 <p align="left">&nbsp;</p>
 <p align="left">&nbsp;</p>
-<p align="left"><span style="font-family: monospace;"><span style="font-size: small;"><strong>NODE</strong></span></span><span style="font-family: monospace;"><span style="font-size: small;">* (nodeName, hostName)</span></span></p>
+<p align="left"><span style="font-family: monospace;"><span style="font-size: small;"><strong>NODE</strong></span></span><span style="font-family: monospace;"><span style="font-size: small;">* (node_name, host_name,nffg_rif,functionaltypeId)</span></span></p>
 <p align="left"><span style="font-family: monospace;"><span style="font-size: small;">| </span></span></p>
-<p align="left"><span style="font-family: monospace;"><span style="font-size: small;">|--- LINK* (linkName, sourceNode, destinationNode, </span></span><span style="font-family: monospace;"><span style="font-size: small;">minimumTroughput, maximumLatency, bool)</span></span></p>
+<p align="left"><span style="font-family: monospace;"><span style="font-size: small;">|--- LINK* (link_name, sourceNode, destinationNode, </span></span><span style="font-family: monospace;"><span style="font-size: small;">min_throughput, max_latency, overwrite)</span></span></p>
 <p align="left">&nbsp;</p>
 <p align="left">&nbsp;</p>
-<p align="left"><span style="font-family: monospace;"><span style="font-size: small;"><strong>LINK</strong></span></span><span style="font-family: monospace;"><span style="font-size: small;">* (linkName, sourceNode, destinationNode, minimumTroughput, maximumLatency, bool)</span></span></p>
+<p align="left"><span style="font-family: monospace;"><span style="font-size: small;"><strong>LINK</strong></span></span><span style="font-family: monospace;"><span style="font-size: small;">* (link_name, sourceNode, destinationNode, min_throughput, max_latency, overwrite)</span></span></p>
 <p align="left">&nbsp;</p>
 <p align="left"><span style="font-family: monospace;"><span style="font-size: small;"><strong>CATALOG </strong></span></span><span style="font-family: monospace;"><span style="font-size: small;">?</span></span></p>
 <p align="left"><span style="font-family: monospace;"><span style="font-size: small;">|</span></span></p>
-<p align="left"><span style="font-family: monospace;"><span style="font-size: small;">|--- FUNCTIONALTYPE* (funcTypeName, requiredMemory, requiredStorage)</span></span></p>
+<p align="left"><span style="font-family: monospace;"><span style="font-size: small;">|--- FUNCTIONALTYPE* (functionaltypeId,functionalTypeName, required_memory, required_storage)</span></span></p>
 <p align="left">&nbsp;</p>
 <p align="left">&nbsp;</p>
-<p align="left"><span style="font-family: monospace;"><span style="font-size: small;"><strong>FUNCTIONALTYPE</strong></span></span><span style="font-family: monospace;"><span style="font-size: small;">* (funcTypeName, requiredMemory, requiredStorage)</span></span></p>
+<p align="left"><span style="font-family: monospace;"><span style="font-size: small;"><strong>FUNCTIONALTYPE</strong></span></span><span style="font-family: monospace;"><span style="font-size: small;">* (functionaltypeId,functionalTypeName, required_memory, required_storage)</span></span></p>
 <p align="left">&nbsp;</p>
 <p align="left">&nbsp;</p>
 <p align="left"><span style="font-family: monospace;"><span style="font-size: small;"><strong>IN</strong></span></span></p>
 <p align="left"><span style="font-family: monospace;"><span style="font-size: small;">| </span></span></p>
-<p align="left"><span style="font-family: monospace;"><span style="font-size: small;">|--- HOST* (hostName, hostName, maximumNumberOfVNFs, memory,&nbsp;</span></span><span style="font-family: monospace;"><span style="font-size: small;">diskStorage) </span></span></p>
+<p align="left"><span style="font-family: monospace;"><span style="font-size: small;">|--- HOST* (host_name, number_VNFs, memory,&nbsp;</span></span><span style="font-family: monospace;"><span style="font-size: small;">diskStorage) </span></span></p>
 <p align="left"><span style="font-family: monospace;"><span style="font-size: small;">| </span></span></p>
 <p align="left"><span style="font-family: monospace;"><span style="font-size: small;">|--- PERFORMANCE (averageThroughput, latency, sourceHost,&nbsp;</span></span><span style="font-family: monospace;"><span style="font-size: small;">destinationHost)</span></span></p>
 <p align="left">&nbsp;</p>
 <p align="left">&nbsp;</p>
 <p align="left"><span style="font-family: monospace;"><span style="font-size: small;"><strong>HOSTs </strong></span></span><span style="font-family: monospace;"><span style="font-size: small;">?</span></span></p>
 <p align="left"><span style="font-family: monospace;"><span style="font-size: small;">|</span></span></p>
-<p align="left"><span style="font-family: monospace;"><span style="font-size: small;">|--- HOST* (hostName, hostName, maximumNumberOfVNFs, memory,&nbsp;</span></span><span style="font-family: monospace;"><span style="font-size: small;">diskStorage)</span></span></p>
+<p align="left"><span style="font-family: monospace;"><span style="font-size: small;">|--- HOST* (host_name, number_VNFs, memory,&nbsp;</span></span><span style="font-family: monospace;"><span style="font-size: small;">diskStorage)</span></span></p>
 <p align="left">&nbsp;</p>
 <p align="left">&nbsp;</p>
-<p align="left"><span style="font-family: monospace;"><span style="font-size: small;"><strong>HOST</strong></span></span><span style="font-family: monospace;"><span style="font-size: small;">* (hostName, hostName, maximumNumberOfVNFs, memory,diskStorage)</span></span></p>
+<p align="left"><span style="font-family: monospace;"><span style="font-size: small;"><strong>HOST</strong></span></span><span style="font-family: monospace;"><span style="font-size: small;">* (host_name, number_VNFs, memory,&nbsp;</span></span><span style="font-family: monospace;"><span style="font-size: small;">diskStorage)</span></span></p>
 <p align="left">&nbsp;</p>
-<p align="left"><span style="font-family: monospace;"><span style="font-size: small;"><strong>PERFORMANCE</strong></span></span><span style="font-family: monospace;"><span style="font-size: small;"> (averageThroughput, latency, sourceHost, destinationHost)</span></span></p>
+<p align="left"><span style="font-family: monospace;"><span style="font-size: small;"><strong>PERFORMANCE</strong></span></span><span style="font-family: monospace;"><span style="font-size: small;"> (averageThroughput, latency, sourceHost,&nbsp;</span></span><span style="font-family: monospace;"><span style="font-size: small;">destinationHost)</span></span></p>
+<p align="left"><span style="font-family: monospace;"><span style="font-size: small;"><strong>HOST REACHABLE</strong></span></span><span style="font-family: monospace;"><span style="font-size: small;"> (nameReachable)</span></span></p>
+<p align="left">&nbsp;</p>
 
+<br><br>
 
-
-<p class="western" align="center"><b>Resources with Url</b></p>
+<p class="western" align="center"><b>RESOURCES WITH RESPECTIVE URLs</b></p>
 <p class="western" align="center"><br/>
 <br/>
 
-<ul>
-<li>Nffgs &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;http://localhost:8080/NfvDeployer/rest/MyNP/ &nbsp; &nbsp; Nffgs
-<ul>
-<li></li>
-<li>{id} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;http://localhost:8080/NfvDeployer/rest/MyNP/ &nbsp; &nbsp; Nffgs/{id}</li>
-</ul>
-</li>
-</ul>
+<br><br>
+<div align="left">
+<p>NFFGs &nbsp; <span style="color: #3366ff;">http://localhost:8080/NfvDeployer/rest/ np/nffgs</span> <br />&nbsp; &nbsp; &nbsp; &nbsp;</p>
+<p>&nbsp; &nbsp; &nbsp; {id} &nbsp; <span style="color: #3366ff;">http://localhost:8080/NfvDeployer/rest/ np/nffg/{id}</span></p>
 <p>&nbsp;</p>
-<ul>
-<li>Nodes
-<ul>
-<li>&nbsp;</li>
-<li>{id} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; http://localhost:8080/NfvDeployer/rest/MyNP/&nbsp; &nbsp; &nbsp;Nodes/{id}
-<ul>
-<li>&nbsp;</li>
-<li>reachableHosts &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;http://localhost:8080/NfvDeployer/rest/MyNP/&nbsp; &nbsp; &nbsp;Nodes/{id}</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
+<p>NODEs &nbsp;<span style="color: #3366ff;"> http://localhost:8080/NfvDeployer/rest/ np/nodes/{id}</span> <br /> &nbsp;</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp;{id} &nbsp;<span style="color: #3366ff;"> http://localhost:8080/NfvDeployer/rest/ np/nodes/{id}/reachablehosts</span></p>
 <p>&nbsp;</p>
-<ul>
-<li>&nbsp;Hosts &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;http://localhost:8080/NfvDeployer/rest/MyNP/&nbsp; &nbsp; &nbsp;Hosts</li>
-</ul>
+<p>HOST &nbsp; <span style="color: #3366ff;">http://localhost:8080/NfvDeployer/rest/ np/hosts</span></p>
 <p>&nbsp;</p>
-<ul>
-<li>Catalog &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;http://localhost:8080/NfvDeployer/rest/MyNP/ &nbsp; &nbsp; Catalog</li>
-</ul>
+<p>CATALOG &nbsp;<span style="color: #3366ff;"> http://localhost:8080/NfvDeployer/rest/ np/catalog</span></p>
 <p>&nbsp;</p>
-<ul>
-<li>Performance &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;http://localhost:8080/NfvDeployer/rest/MyNP/ &nbsp; &nbsp; Performance</li>
-</ul>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
+<p>PERFORMANCE &nbsp; <span style="color: #3366ff;">http://localhost:8080/NfvDeployer/rest/ np/performances</span></p>
+</div>
 
 
-</p>
 
-<p class="western" align="center"><b>RESTFUL API DESCRIPTION</b></p>
-<table width="643" cellpadding="4" cellspacing="0">
-	<col width="169">
-	<col width="79">
-	<col width="71">
-	<col width="83">
-	<col width="199">
-	<tr>
-		<td width="169" height="59" bgcolor="#dddddd" style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0.1cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
-			<p class="western" align="center"><font size="2" style="font-size: 11pt">URI</font></p>
-		</td>
-		<td width="79" bgcolor="#dddddd" style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0.1cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
-			<p class="western" align="center"><font size="2" style="font-size: 11pt">HTTP
-			METHOD</font></p>
-		</td>
-		<td width="71" bgcolor="#dddddd" style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0.1cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
-			<p class="western" align="center"><font size="2" style="font-size: 11pt">XML
-			ELEMENT</font></p>
-		</td>
-		<td width="83" bgcolor="#dddddd" style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0.1cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
-			<p class="western" align="center"><font size="2" style="font-size: 11pt">RESPONSE</font></p>
-		</td>
-		<td width="199" bgcolor="#dddddd" style="border: 1px solid #000000; padding: 0.1cm">
-			<p class="western" align="center"><font size="2" style="font-size: 11pt">DESCRIPTION</font></p>
-		</td>
-	</tr>
-	<tr>
-		<td width="169" height="30" bgcolor="#eeeeee" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
-			<p class="western" align="center"><font size="2" style="font-size: 11pt">/MyNP/Nffgs</font></p>
-		</td>
-		<td width="79" bgcolor="#99ccff" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
-			<p class="western" align="center"><font size="2" style="font-size: 11pt">GET</font></p>
-		</td>
-		<td width="71" bgcolor="#eeeeee" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
-			<p class="western" align="center"><font size="2" style="font-size: 11pt">---</font></p>
-		</td>
-		<td width="83" bgcolor="#eeeeee" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
-			<p class="western" align="center"><font size="2" style="font-size: 11pt">Nffgs</font></p>
-		</td>
-		<td width="199" bgcolor="#eeeeee" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0.1cm">
-			<p class="western" align="center"><font size="2" style="font-size: 11pt">Get
-			the list of all Nffg</font></p>
-		</td>
-	</tr>
-	<tr>
-		<td width="169" height="33" bgcolor="#eeeeee" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
-			<p class="western" align="center"><font size="2" style="font-size: 11pt">/MyNP/Nffgs/{id}</font></p>
-		</td>
-		<td width="79" bgcolor="#99ccff" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
-			<p class="western" align="center"><font size="2" style="font-size: 11pt">GET</font></p>
-		</td>
-		<td width="71" bgcolor="#eeeeee" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
-			<p class="western" align="center"><font size="2" style="font-size: 11pt">---</font></p>
-		</td>
-		<td width="83" bgcolor="#eeeeee" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
-			<p class="western" align="center"><font size="2" style="font-size: 11pt">Nffg</font></p>
-		</td>
-		<td width="199" bgcolor="#eeeeee" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0.1cm">
-			<p class="western" align="center"><font size="2" style="font-size: 11pt">Get
-			a single Nffg by id</font></p>
-		</td>
-	</tr>
-	<tr>
-		<td width="169" height="33" bgcolor="#eeeeee" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
-			<p class="western" align="center"><font size="2" style="font-size: 11pt">/MyNP/addNffg</font></p>
-		</td>
-		<td width="79" bgcolor="#ccff99" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
-			<p class="western" align="center"><font size="2" style="font-size: 11pt">POST</font></p>
-		</td>
-		<td width="71" bgcolor="#eeeeee" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
-			<p class="western" align="center"><font size="2" style="font-size: 11pt">Nffg</font></p>
-		</td>
-		<td width="83" bgcolor="#eeeeee" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
-			<p class="western" align="center"><font size="2" style="font-size: 11pt">Nffg</font></p>
-		</td>
-		<td width="199" bgcolor="#eeeeee" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0.1cm">
-			<p class="western" align="center"><font size="2" style="font-size: 11pt">Create
-			a new Nffg</font></p>
-		</td>
-	</tr>
-	<tr>
-		<td width="169" height="29" bgcolor="#eeeeee" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
-			<p class="western" align="center"><font size="2" style="font-size: 11pt">/MyNP/Nodes/{id}</font></p>
-		</td>
-		<td width="79" bgcolor="#99ccff" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
-			<p class="western" align="center"><font size="2" style="font-size: 11pt">GET</font></p>
-		</td>
-		<td width="71" bgcolor="#eeeeee" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
-			<p class="western" align="center"><font size="2" style="font-size: 11pt">---</font></p>
-		</td>
-		<td width="83" bgcolor="#eeeeee" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
-			<p class="western" align="center"><font size="2" style="font-size: 11pt">Node</font></p>
-		</td>
-		<td width="199" bgcolor="#eeeeee" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0.1cm">
-			<p class="western" align="center"><font size="2" style="font-size: 11pt">Get
-			a Node by Id</font></p>
-		</td>
-	</tr>
-	<tr>
-		<td width="169" height="29" bgcolor="#eeeeee" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
-			<p class="western" align="center"><font size="2" style="font-size: 11pt">/MyNP/{id}/addNode</font></p>
-		</td>
-		<td width="79" bgcolor="#ccff99" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
-			<p class="western" align="center"><font size="2" style="font-size: 11pt">POST</font></p>
-		</td>
-		<td width="71" bgcolor="#eeeeee" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
-			<p class="western" align="center"><font size="2" style="font-size: 11pt">Node</font></p>
-		</td>
-		<td width="83" bgcolor="#eeeeee" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
-			<p class="western" align="center"><font size="2" style="font-size: 11pt">Node</font></p>
-		</td>
-		<td width="199" bgcolor="#eeeeee" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0.1cm">
-			<p class="western" align="center"><font size="2" style="font-size: 11pt">Create
-			a new Node by Nffg Id</font></p>
-		</td>
-	</tr>
-	<tr>
-		<td width="169" bgcolor="#eeeeee" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
-			<p class="western" align="center"><font size="2" style="font-size: 11pt">/MyNP/Node</font><font size="2" style="font-size: 11pt">s</font><font size="2" style="font-size: 11pt">/{id}/reachableHosts</font></p>
-		</td>
-		<td width="79" bgcolor="#99ccff" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
-			<p class="western" align="center"><font size="2" style="font-size: 11pt">GET</font></p>
-		</td>
-		<td width="71" bgcolor="#eeeeee" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
-			<p class="western" align="center"><font size="2" style="font-size: 11pt">---</font></p>
-		</td>
-		<td width="83" bgcolor="#eeeeee" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
-			<p class="western" align="center"><font size="2" style="font-size: 11pt">Host</font></p>
-		</td>
-		<td width="199" bgcolor="#eeeeee" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0.1cm">
-			<p class="western" align="center"><font size="2" style="font-size: 11pt">Get
-			the reachable host of a specific node (id)</font></p>
-		</td>
-	</tr>
-	<tr>
-		<td width="169" height="28" bgcolor="#eeeeee" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
-			<p class="western" align="center"><font size="2" style="font-size: 11pt">/MyNP/Hosts</font></p>
-		</td>
-		<td width="79" bgcolor="#99ccff" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
-			<p class="western" align="center"><font size="2" style="font-size: 11pt">GET</font></p>
-		</td>
-		<td width="71" bgcolor="#eeeeee" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
-			<p class="western" align="center"><font size="2" style="font-size: 11pt">---</font></p>
-		</td>
-		<td width="83" bgcolor="#eeeeee" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
-			<p class="western" align="center"><font size="2" style="font-size: 11pt">Hosts</font></p>
-		</td>
-		<td width="199" bgcolor="#eeeeee" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0.1cm">
-			<p class="western" align="center"><font size="2" style="font-size: 11pt">Get
-			the list of all Hosts</font></p>
-		</td>
-	</tr>
-	<tr>
-		<td width="169" height="33" bgcolor="#eeeeee" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
-			<p class="western" align="center"><font size="2" style="font-size: 11pt">/MyNP/Catalog</font></p>
-		</td>
-		<td width="79" bgcolor="#99ccff" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
-			<p class="western" align="center"><font size="2" style="font-size: 11pt">GET</font></p>
-		</td>
-		<td width="71" bgcolor="#eeeeee" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
-			<p class="western" align="center"><font size="2" style="font-size: 11pt">---</font></p>
-		</td>
-		<td width="83" bgcolor="#eeeeee" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
-			<p class="western" align="center"><font size="2" style="font-size: 11pt">Catalog</font></p>
-		</td>
-		<td width="199" bgcolor="#eeeeee" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0.1cm">
-			<p class="western" align="center"><font size="2" style="font-size: 11pt">Get
-			the Catalog</font></p>
-		</td>
-	</tr>
-	<tr>
-		<td width="169" height="30" bgcolor="#eeeeee" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
-			<p class="western" align="center"><font size="2" style="font-size: 11pt">/MyNP/Performance</font></p>
-		</td>
-		<td width="79" bgcolor="#99ccff" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
-			<p class="western" align="center"><font size="2" style="font-size: 11pt">GET</font></p>
-		</td>
-		<td width="71" bgcolor="#eeeeee" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
-			<p class="western" align="center"><font size="2" style="font-size: 11pt">---</font></p>
-		</td>
-		<td width="83" bgcolor="#eeeeee" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
-			<p class="western" align="center"><font size="2" style="font-size: 11pt">Performances</font></p>
-		</td>
-		<td width="199" bgcolor="#eeeeee" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0.1cm">
-			<p class="western" align="center"><font size="2" style="font-size: 11pt">Get
-			all Performances</font></p>
-		</td>
-	</tr>
-	<tr>
-		<td width="169" height="30" bgcolor="#eeeeee" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
-			<p class="western" align="center"><font size="2" style="font-size: 11pt">/MyNP/{id}/addLink</font></p>
-		</td>
-		<td width="79" bgcolor="#ccff99" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
-			<p class="western" align="center"><font size="2" style="font-size: 11pt">POST</font></p>
-		</td>
-		<td width="71" bgcolor="#eeeeee" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
-			<p class="western" align="center"><font size="2" style="font-size: 11pt">Link</font></p>
-		</td>
-		<td width="83" bgcolor="#eeeeee" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
-			<p class="western" align="center"><font size="2" style="font-size: 11pt">Link</font></p>
-		</td>
-		<td width="199" bgcolor="#eeeeee" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0.1cm">
-			<p class="western" align="center"><font size="2" style="font-size: 11pt">Create
-			a new Link</font></p>
-		</td>
-	</tr>
-	<tr>
-		<td width="169" height="30" bgcolor="#eeeeee" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
-			<p class="western" align="center"><font size="2" style="font-size: 11pt">/MyNP/{id}/deleteNode</font></p>
-		</td>
-		<td width="79" bgcolor="#ffcccc" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
-			<p class="western" align="center"><font size="2" style="font-size: 11pt">DELETE</font></p>
-		</td>
-		<td width="71" bgcolor="#eeeeee" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
-			<p class="western" align="center"><font size="2" style="font-size: 11pt">---</font></p>
-		</td>
-		<td width="83" bgcolor="#eeeeee" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
-			<p class="western" align="center"><font size="2" style="font-size: 11pt">---</font></p>
-		</td>
-		<td width="199" bgcolor="#eeeeee" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0.1cm">
-			<p class="western" align="center"><font size="2" style="font-size: 11pt">Not
-			Implemented</font></p>
-		</td>
-	</tr>
-	<tr>
-		<td width="169" height="28" bgcolor="#eeeeee" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
-			<p class="western" align="center"><font size="2" style="font-size: 11pt">MyNP/{id}/deleteLink</font></p>
-		</td>
-		<td width="79" bgcolor="#ffcccc" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
-			<p class="western" align="center"><font size="2" style="font-size: 11pt">DELETE</font></p>
-		</td>
-		<td width="71" bgcolor="#eeeeee" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
-			<p class="western" align="center"><font size="2" style="font-size: 11pt">---</font></p>
-		</td>
-		<td width="83" bgcolor="#eeeeee" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
-			<p class="western" align="center"><font size="2" style="font-size: 11pt">---</font></p>
-		</td>
-		<td width="199" bgcolor="#eeeeee" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0.1cm">
-			<p class="western" align="center"><font size="2" style="font-size: 11pt">NotImplemented</font></p>
-		</td>
-	</tr>
-</table>
-<p class="western" align="center" style="margin-bottom: 0cm; line-height: 100%">
-<br/>
-
-</p>
-<p class="western" align="center" style="margin-bottom: 0cm; line-height: 100%">
-The base URL is the following:   
-<font color="#000080"><span lang="zxx"><u><a href="http://localhost:8080/NfvDeployer/rest/"><b>http://localhost:8080/NfvDeployer/rest/</b></a></u></span></font></p>
-<p class="western" align="center" style="margin-bottom: 0cm; line-height: 100%">
-<br/>
-
-</p>
-<p class="western" align="center" style="margin-bottom: 0cm; line-height: 100%">
-<b>RESPONSE METHOD DESCRIPTION</b></p>
-<p class="western" align="center" style="margin-bottom: 0cm; line-height: 100%">
-<br/>
-
-</p>
-<table width="643" cellpadding="4" cellspacing="0">
-	<col width="205">
-	<col width="420">
-	<tr>
-		<td width="205" height="44" bgcolor="#cccccc" style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0.1cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
-			<p class="western" align="center">HTTP METHOD</p>
-		</td>
-		<td width="420" bgcolor="#cccccc" style="border: 1px solid #000000; padding: 0.1cm">
-			<p class="western" align="center">HTTP CODE</p>
-		</td>
-	</tr>
-	<tr>
-		<td width="205" height="52" bgcolor="#99ccff" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
-			<p class="western" align="center">GET</p>
-		</td>
-		<td width="420" bgcolor="#eeeeee" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0.1cm">
-			<p class="western" align="left">200 – OK</p>
-			<p class="western" align="left">404 – NOT FOUND</p>
-			<p class="western" align="left">500 – INTERNAL SERVER ERROR</p>
-		</td>
-	</tr>
-	<tr>
-		<td width="205" bgcolor="#ccff99" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
-			<p class="western" align="center">POST</p>
-		</td>
-		<td width="420" bgcolor="#eeeeee" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0.1cm">
-			<p class="western" align="left">200 – OK</p>
-			<p class="western" align="left">400 – BAD REQUEST</p>
-			<p class="western" align="left">404 – NOT FOUND</p>
-			<p class="western" align="left">403 – FORBIDDEN</p>
-			<p class="western" align="left">500 – INTERNAT SERVER ERROR</p>
-		</td>
-	</tr>
-	<tr>
-		<td width="205" height="18" bgcolor="#ffcccc" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
-			<p class="western" align="center">DELETE</p>
-		</td>
-		<td width="420" bgcolor="#eeeeee" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0.1cm">
-			<p class="western" align="left">501 – NOT IMPLEMENTED</p>
-		</td>
-	</tr>
-</table>
-<p class="western" align="left" style="margin-bottom: 0cm; line-height: 100%">
-<br/>
-
-
-</p>
 </body>
 </html>
