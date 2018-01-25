@@ -849,7 +849,7 @@ public void checkResource(NffgImpl nffgimpl) throws NfvReaderException {
     }
 }
 
-public void delete(String nffg_name,String link_name) throws Exception {
+public void delLink(String nffg_name,String link_name) throws Exception {
 	
 	NffgImpl nffg_link = nffgs.get(nffg_name);
 	
@@ -878,6 +878,41 @@ public void delete(String nffg_name,String link_name) throws Exception {
 	
 	System.out.println("LinkMap size prima dopo rimozione: " + linkmap.size());
 		
+}
+
+public void delNode(String nffg_name,String node_name) throws Exception {
+	
+	
+NffgImpl nffg_link = nffgs.get(nffg_name);
+	
+	System.out.println("Rimuovo dalla nffg");
+	
+	for(NodeImpl n : nffg_link.getNodeImpl()) {
+		if(n.getNodeName().equals(node_name)) {
+			System.out.println("dentro if..confronto: " + n.getNodeName() + " con: " + node_name);
+			nffg_link.getNodeImpl().remove(n);
+			break;
+		}		
+	}
+	
+	
+
+	
+    System.out.println("NodesMap size prima della rimozione: " + Nodes.size());
+    System.out.println("Neo4JNodes size prima della rimozione: " + Neo4JNodes.size());
+	
+    Nodes.remove(node_name);
+    Neo4JNodes.remove(node_name);
+    
+	
+	System.out.println("NodesMap size dopo dopo rimozione: " + Nodes.size());
+	System.out.println("Neo4JNodes size dopo della rimozione: " + Neo4JNodes.size());
+	
+   /* resp = target.path("node/" + Neo4JNodes.get(node_name).getId()).request(MediaType.APPLICATION_XML).delete(Response.class);
+	
+	if(resp.getStatus()!=204)
+		throw new Exception("Node Delete " + resp.getStatus() + " URI: " + BaseURI);*/
+	
 }
 
 	

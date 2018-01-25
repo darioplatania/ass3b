@@ -502,8 +502,41 @@ public class NfvResources {
 		if(!Neo4JDB.linkmap.containsKey(link_name))
 			throw new NotFoundException("Link Not Found!"); // Link Not Found
 		
-		neo4j.delete(nffg_name, link_name);
+		neo4j.delLink(nffg_name, link_name);
 		
+	}
+	
+	@DELETE
+	@Path("{id_nffg}/{id_nodo}/delNode")
+	@ApiOperation(value = "Delete Node", notes = "xml format")
+	@ApiResponses(value = {
+			@ApiResponse(code = 501, message = "Not Implemented")
+	})
+    @Produces(MediaType.APPLICATION_XML)
+	public void deleteNode(@PathParam("id_nffg") String nffg_name,@PathParam("id_nodo") String node_name) throws Exception{
+		
+		if (!Neo4JDB.nffgs.containsKey(nffg_name))
+			throw new NotFoundException("Nffg Not Found!"); // Nffg Not Found
+		
+		if(!Neo4JDB.Nodes.containsKey(node_name))
+			throw new NotFoundException("Node Not Found!"); // Link Not Found
+		
+		NffgImpl nffg = Neo4JDB.nffgs.get(nffg_name);
+		
+		for(NodeImpl n : nffg.getNodeImpl()) {
+			/*if(!n.getLinkImpl().isEmpty())
+				throw new Exception("Link Presente..non posso eliminare il nodo!");*/
+			if( (n.getNodeName().equals(node_name)) && (n.getLinkImpl().isEmpty()) ) {
+				System.out.println("Posso Eliminare il nodo");
+				neo4j.delNode(nffg_name,node_name);
+				break;		
+			}
+			else
+				throw new NotFoundException("Link Presente nel nodo..non posso eliminarlo!");
+		}
+		
+		//neo4j.delLink(nffg_name, link_name);
+
 	}
 
 
