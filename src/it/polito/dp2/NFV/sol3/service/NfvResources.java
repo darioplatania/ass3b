@@ -460,9 +460,9 @@ public class NfvResources {
 	//}
 	
 	
-	@DELETE
+	/*@DELETE
 	@Path("{id}/delNode")
-	@ApiOperation(value = "Delete Nffgs", notes = "xml format")
+	@ApiOperation(value = "Delete Node", notes = "xml format")
 	@ApiResponses(value = {
 			@ApiResponse(code = 501, message = "Not Implemented")
 	})
@@ -475,7 +475,7 @@ public class NfvResources {
 	
 	@DELETE
 	@Path("{id}/delLink")
-	@ApiOperation(value = "Delete Nffgs", notes = "xml format")
+	@ApiOperation(value = "Delete Link", notes = "xml format")
 	@ApiResponses(value = {
 			@ApiResponse(code = 501, message = "Not Implemented")
 	})
@@ -484,7 +484,28 @@ public class NfvResources {
 		
 		throw new NotImplementedException("Method not Implemented");
 
+	}*/
+	
+	@DELETE
+	@Path("{id_nffg}/{id_link}/delLink")
+	@ApiOperation(value = "Delete Link", notes = "xml format")
+	@ApiResponses(value = {
+	@ApiResponse(code = 200, message = "OK")
+	})
+    @Produces(MediaType.APPLICATION_XML)
+	public void deleteLink(@PathParam("id_nffg") String nffg_name,@PathParam("id_link") String link_name) throws Exception{
+		
+		if (!Neo4JDB.nffgs.containsKey(nffg_name))
+			throw new NotFoundException("Nffg Not Found!"); // Nffg Not Found
+		
+		
+		if(!Neo4JDB.linkmap.containsKey(link_name))
+			throw new NotFoundException("Link Not Found!"); // Link Not Found
+		
+		neo4j.delete(nffg_name, link_name);
+		
 	}
+
 
 	
 }

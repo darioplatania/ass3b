@@ -2,7 +2,7 @@
 // Questo file xe8 stato generato dall'architettura JavaTM per XML Binding (JAXB) Reference Implementation, v2.3.0-b170531.0717 
 // Vedere <a href="https://jaxb.java.net/">https://jaxb.java.net/</a> 
 // Qualsiasi modifica a questo file andrxe0 persa durante la ricompilazione dello schema di origine. 
-// Generato il: 2018.01.23 alle 05:35:03 PM CET 
+// Generato il: 2018.01.25 alle 09:00:02 PM CET 
 //
 
 

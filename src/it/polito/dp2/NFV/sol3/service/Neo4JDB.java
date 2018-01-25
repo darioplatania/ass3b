@@ -41,6 +41,7 @@ public class Neo4JDB {
 	protected static		Map<String,NffgImpl> nffgs 				     = new ConcurrentHashMap<>();
 	private static 	    Map<String, Node> Neo4JNodes 		         = new ConcurrentHashMap<>();
 	private static  		Map<String, Node> Neo4JHost 		 		     = new ConcurrentHashMap<>();
+	protected static	    Map<String,Relationship> linkmap 	 			 = new ConcurrentHashMap<>();
 	protected static	    Map<String,HostImpl> hostmap_appoggio 	     = new ConcurrentHashMap<>();
 	protected static	    Map<String,FtypeImpl> ftypemap_appoggio 	     = new ConcurrentHashMap<>();
 	protected static	    Map<String,PerformanceImpl> perfmap_appoggio 	 = new ConcurrentHashMap<>();
@@ -115,7 +116,10 @@ public boolean loadnffg(NffgImpl nffg) throws NfvReaderException, Exception {
 	    
 	   	for(Map.Entry<String, NodeImpl> node : Nodes.entrySet()){	
 	        for (LinkImpl link : node.getValue().getLinkImpl()) {            		
-	            NodeLinkRel(node.getValue().getNodeName(), link.getDestinationNode());
+	            Relationship rel_return = NodeLinkRel(node.getValue().getNodeName(), link.getDestinationNode());	    
+	            
+	            linkmap.put(link.getLinkName(), rel_return);
+	            
 	        }
 	    }
 	   	
@@ -160,7 +164,7 @@ private boolean NodePropertiesCreate(String nodeName) throws Exception{
 		node.setLabels(labels);
 
 		/*Post properties*/
-		Response resp = client.target(BaseURI+"/node").request(MediaType.APPLICATION_XML).post(Entity.entity(node,MediaType.APPLICATION_XML),Response.class);
+		resp = target.path("node").request(MediaType.APPLICATION_XML).post(Entity.entity(node,MediaType.APPLICATION_XML),Response.class);
 		
 		if(resp.getStatus()!=201)
 			throw new Exception("Node not create " + resp.getStatus() + " URI: " + BaseURI);
@@ -168,7 +172,7 @@ private boolean NodePropertiesCreate(String nodeName) throws Exception{
 		node.setId(resp.readEntity(Node.class).getId());
 		
 		/*Post label*/
-		resp = client.target(BaseURI+"/node/"+ node.getId()  +"/labels").request(MediaType.APPLICATION_XML).post(Entity.entity(labels,MediaType.APPLICATION_XML),Response.class);
+		resp = target.path("node/"+ node.getId()  +"/labels").request(MediaType.APPLICATION_XML).post(Entity.entity(labels,MediaType.APPLICATION_XML),Response.class);
 		
 		if(resp.getStatus()!=204)
 			throw new Exception("Label is not created" + resp.getStatus());
@@ -190,7 +194,7 @@ private boolean NodePropertiesCreate(String nodeName) throws Exception{
 }
 
 
-private void NodeLinkRel(String srcNode, String destNode) throws Exception{
+private Relationship NodeLinkRel(String srcNode, String destNode) throws Exception{
 	
 	System.out.println("*** Init Node Link Rel ***");
 	
@@ -199,12 +203,17 @@ private void NodeLinkRel(String srcNode, String destNode) throws Exception{
     rel.setDstNode(Neo4JNodes.get(destNode).getId());	
 
      /*Post Relationship */
-     resp = client.target(BaseURI+"/node/"+Neo4JNodes.get(srcNode).getId()+"/relationships").request(MediaType.APPLICATION_XML).post(Entity.entity(rel,MediaType.APPLICATION_XML),Response.class);
+     resp = target.path("node/"+Neo4JNodes.get(srcNode).getId()+"/relationships").request(MediaType.APPLICATION_XML).post(Entity.entity(rel,MediaType.APPLICATION_XML),Response.class);
 
     if ((resp.getStatus() != 200) && (resp.getStatus() != 201)) {
         throw new Exception("Error creating relationship");
     }
+    
+    rel.setId(resp.readEntity(Relationship.class).getId());
+
     System.out.println("*** End Node Link Rel ***");
+    
+    return rel;
 }
 
 private void HostPropertiesCreate(String hostName) throws Exception{
@@ -230,7 +239,7 @@ private void HostPropertiesCreate(String hostName) throws Exception{
 		node.setLabels(labels);
 
 		/*Post properties*/
-		Response resp = client.target(BaseURI+"/node").request(MediaType.APPLICATION_XML).post(Entity.entity(node,MediaType.APPLICATION_XML),Response.class);
+		resp = target.path("node").request(MediaType.APPLICATION_XML).post(Entity.entity(node,MediaType.APPLICATION_XML),Response.class);
 		
 		if(resp.getStatus()!=201)
 			throw new Exception("Node not create" + resp.getStatus());
@@ -238,7 +247,7 @@ private void HostPropertiesCreate(String hostName) throws Exception{
 		node.setId(resp.readEntity(Node.class).getId());
 
 		/*Post label*/
-		resp = client.target(BaseURI+"/node/"+ node.getId()  +"/labels").request(MediaType.APPLICATION_XML).post(Entity.entity(labels,MediaType.APPLICATION_XML),Response.class);
+		resp = target.path("node/"+ node.getId()  +"/labels").request(MediaType.APPLICATION_XML).post(Entity.entity(labels,MediaType.APPLICATION_XML),Response.class);
 		
 		if(resp.getStatus()!=204)
 			throw new Exception("Label is not created" + resp.getStatus());
@@ -252,7 +261,7 @@ private void HostPropertiesCreate(String hostName) throws Exception{
 
 }
 
-private void NodeHostRel(String srcNode, String destNode) throws Exception{
+private Relationship NodeHostRel(String srcNode, String destNode) throws Exception{
 	
 	System.out.println("*** Init Node Host Relationship ***");
 
@@ -261,12 +270,17 @@ private void NodeHostRel(String srcNode, String destNode) throws Exception{
     rel.setDstNode(Neo4JHost.get(destNode).getId());
   
      /* Insert Relationship */
-     resp = client.target(BaseURI+"/node/"+Neo4JNodes.get(srcNode).getId()+"/relationships").request(MediaType.APPLICATION_XML).post(Entity.entity(rel,MediaType.APPLICATION_XML),Response.class);
+     resp = target.path("node/"+Neo4JNodes.get(srcNode).getId()+"/relationships").request(MediaType.APPLICATION_XML).post(Entity.entity(rel,MediaType.APPLICATION_XML),Response.class);
 
     if ((resp.getStatus() != 200) && (resp.getStatus() != 201)) {
         throw new Exception("Error creating relationship");
     }
+    
+    rel.setId(resp.readEntity(Relationship.class).getId());
+    
     System.out.println("*** End Node Host Relationship ***");
+    
+    return rel;
 }
 
 
@@ -380,7 +394,9 @@ public Collection<HostImpl> getReachableHosts(String id) throws Exception{
 	
 	node = Neo4JNodes.get(id);
 	
-	Response resp = client.target(BaseURI+"/node/"+ node.getId() + "/reachableNodes?relationshipTypes=ForwardsTo&NodeLabel=Node").request(MediaType.APPLICATION_XML).get(Response.class);
+	//resp = target.path("node/"+ node.getId() + "/reachableNodes?relationshipTypes=ForwardsTo&NodeLabel=Node").request(MediaType.APPLICATION_XML).get(Response.class);
+	
+	resp = target.path("node/"+ node.getId() + "/reachableNodes").queryParam("relationshipTypes", "ForwardsTo").queryParam("NodeLabel", "Node").request(MediaType.APPLICATION_XML).get(Response.class);
 	
 	if(resp.getStatus()!= 200)
 		throw new Exception("getExtendedNodes Failed");
@@ -527,13 +543,14 @@ public LinkImpl loadLink(NffgImpl nffg, LinkImpl link) throws Exception{
 	System.out.println("** Init loadLink **");
 	
 	
-	NodeLinkRel(link.getSourceNode(),link.getDestinationNode());
+	Relationship rel_return = NodeLinkRel(link.getSourceNode(),link.getDestinationNode());
 	
 	NffgImpl nffg_link = nffgs.get(nffg.getNameNffg());
 	
 	for(NodeImpl n : nffg_link.getNodeImpl()) {
 		if(n.getNodeName().equals(link.getSourceNode())) {
 			n.getLinkImpl().add(link);
+			linkmap.put(link.getLinkName(), rel_return);
 		}
 	}
 	
@@ -563,7 +580,7 @@ public LinkImpl upLink(NffgImpl nffg,LinkImpl link) {
 					n.getLinkImpl().get(i).setMaxLatency(link.getMaxLatency());
 					n.getLinkImpl().get(i).setMinThroughput(link.getMinThroughput());
 					n.getLinkImpl().get(i).setOverwrite(false);
-					n.getLinkImpl().set(i, n.getLinkImpl().get(i));
+					n.getLinkImpl().set(i, n.getLinkImpl().get(i));				
 					
 					linkimpl = n.getLinkImpl().get(i);
 				}
@@ -830,6 +847,37 @@ public void checkResource(NffgImpl nffgimpl) throws NfvReaderException {
         }
       }
     }
+}
+
+public void delete(String nffg_name,String link_name) throws Exception {
+	
+	NffgImpl nffg_link = nffgs.get(nffg_name);
+	
+	System.out.println("Rimuovo dalla nffg");
+	
+	for(NodeImpl n : nffg_link.getNodeImpl()) {
+		for(LinkImpl l : n.getLinkImpl()) {
+			if(l.getLinkName().equals(link_name)) {
+				System.out.println("dentro if..confronto: " + l.getLinkName() + " con: " + link_name);
+				n.getLinkImpl().remove(l);
+				break;
+			}
+		}
+	}
+	
+	
+	
+	resp = target.path("relationship/" + linkmap.get(link_name).getId()).request(MediaType.APPLICATION_XML).delete(Response.class);
+	
+	if(resp.getStatus()!= 204)
+		throw new Exception("Delete Link Failed");
+	
+    System.out.println("LinkMap size prima della rimozione: " + linkmap.size());
+	
+    linkmap.remove(link_name);
+	
+	System.out.println("LinkMap size prima dopo rimozione: " + linkmap.size());
+		
 }
 
 	
