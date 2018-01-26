@@ -538,16 +538,18 @@ public class NfvResources {
 		/*controllo se il nodo ha dei link all'interno(si eccezione - no elimino)*/
 		for(NodeImpl n1 : nffg.getNodeImpl()) {
 			System.out.println("Nodo n1: " + n1.getNodeName());
-			if( (n1.getNodeName().equals(node_name)) && (n1.getLinkImpl().isEmpty()) ) {
-				System.out.println("dentro if delNode--posso eliminarlo");
-				neo4j.delNode(nffg_name,node_name);
-				break;
-			}
-			else {
-				System.out.println("dentro else delNode -- non posso eliminarlo");
+			if( (n1.getNodeName().equals(node_name)) ) {
+				if((n1.getLinkImpl().isEmpty())) {
+					System.out.println("dentro if delNode--posso eliminarlo");
+					neo4j.delNode(nffg_name,node_name);
+					break;
+				}
+				else {
+					System.out.println("dentro else delNode -- non posso eliminarlo");
+					throw new ForbiddenException();
+				}
 			}
 		}
-		
 	}
 
 
