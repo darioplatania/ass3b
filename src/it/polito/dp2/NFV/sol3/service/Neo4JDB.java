@@ -4,6 +4,7 @@ import java.net.URI;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
+import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
@@ -853,18 +854,19 @@ public void delLink(String nffg_name,String link_name) throws Exception {
 	
 	NffgImpl nffg_link = nffgs.get(nffg_name);
 	
-	System.out.println("Rimuovo dalla nffg");
+	System.out.println("Rimuovo Link dalla nffg");
 	
-	for(NodeImpl n : nffg_link.getNodeImpl()) {
-		for(LinkImpl l : n.getLinkImpl()) {
-			if(l.getLinkName().equals(link_name)) {
-				System.out.println("dentro if..confronto: " + l.getLinkName() + " con: " + link_name);
-				n.getLinkImpl().remove(l);
-				break;
+	
+		for(NodeImpl n : nffg_link.getNodeImpl()) {
+			for(LinkImpl l : n.getLinkImpl()) {
+				if(l.getLinkName().equals(link_name)) {
+					System.out.println("dentro if..confronto: " + l.getLinkName() + " con: " + link_name);
+					n.getLinkImpl().remove(l);
+					break;
+				}
 			}
 		}
-	}
-	
+		
 	
 	
 	resp = target.path("relationship/" + linkmap.get(link_name).getId()).request(MediaType.APPLICATION_XML).delete(Response.class);
@@ -882,38 +884,62 @@ public void delLink(String nffg_name,String link_name) throws Exception {
 
 public void delNode(String nffg_name,String node_name) throws Exception {
 	
-	
-NffgImpl nffg_link = nffgs.get(nffg_name);
-	
-	System.out.println("Rimuovo dalla nffg");
-	
-	for(NodeImpl n : nffg_link.getNodeImpl()) {
-		if(n.getNodeName().equals(node_name)) {
-			System.out.println("dentro if..confronto: " + n.getNodeName() + " con: " + node_name);
-			nffg_link.getNodeImpl().remove(n);
-			break;
-		}		
-	}
-	
-	
 
+	//String linkname_inconsistente = null;
+	String id_rel = null;
+
+	NffgImpl nffg_node = nffgs.get(nffg_name);
 	
-    System.out.println("NodesMap size prima della rimozione: " + Nodes.size());
-    System.out.println("Neo4JNodes size prima della rimozione: " + Neo4JNodes.size());
 	
-    Nodes.remove(node_name);
-    Neo4JNodes.remove(node_name);
-    
+		
+		System.out.println("Rimuovo Nodo dalla nffg");
+		
+		for(NodeImpl n : nffg_node.getNodeImpl()) {
+			if(n.getNodeName().equals(node_name)) {
+				System.out.println("dentro if..confronto: " + n.getNodeName() + " con: " + node_name);
+				nffg_node.getNodeImpl().remove(n);
+				break;
+			}		
+		}
+		
+		//get per prendermi le relazioni Host-Nodo
+		resp = target.path("node/" + Neo4JNodes.get(node_name).getId() + "/relationships/all").queryParam("relationshipTypes", "AllocatedOn").request(MediaType.APPLICATION_XML).get(Response.class);
+		
+		List<Relationship> rel = resp.readEntity(new GenericType<List<Relationship>>(){});
+		
+		for(Relationship r : rel) {
+			id_rel = r.getId();
+		}
+		
+		//elimino allocatedOn tra Nodo e Host
+		resp = target.path("relationship/" + id_rel ).request(MediaType.APPLICATION_XML).delete(Response.class);
+		
+		if(resp.getStatus()!=204)
+			throw new Exception("Relationship Node-Host not delete " + resp.getStatus() + " URI: " + BaseURI);
+		
+		//elimino Nodo
+		resp = target.path("node/" + Neo4JNodes.get(node_name).getId()).request(MediaType.APPLICATION_XML).delete(Response.class);
+		
+		if(resp.getStatus()!=204)
+			throw new Exception("Node not delete " + resp.getStatus() + " URI: " + BaseURI);
+		
+		
+		
+	    System.out.println("NodesMap size prima della rimozione: " + Nodes.size());
+	    System.out.println("Neo4JNodes size prima della rimozione: " + Neo4JNodes.size());
+		
+	    Nodes.remove(node_name);
+	    Neo4JNodes.remove(node_name);
+	    
+		
+		System.out.println("NodesMap size dopo dopo rimozione: " + Nodes.size());
+		System.out.println("Neo4JNodes size dopo della rimozione: " + Neo4JNodes.size());
+		
 	
-	System.out.println("NodesMap size dopo dopo rimozione: " + Nodes.size());
-	System.out.println("Neo4JNodes size dopo della rimozione: " + Neo4JNodes.size());
-	
-   /* resp = target.path("node/" + Neo4JNodes.get(node_name).getId()).request(MediaType.APPLICATION_XML).delete(Response.class);
-	
-	if(resp.getStatus()!=204)
-		throw new Exception("Node Delete " + resp.getStatus() + " URI: " + BaseURI);*/
-	
-}
+		
+	   
+		
+	}
 
 	
 	
