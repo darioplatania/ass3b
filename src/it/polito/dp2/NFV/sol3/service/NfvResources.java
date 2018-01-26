@@ -537,94 +537,17 @@ public class NfvResources {
 		
 		/*controllo se il nodo ha dei link all'interno(si eccezione - no elimino)*/
 		for(NodeImpl n1 : nffg.getNodeImpl()) {
+			System.out.println("Nodo n1: " + n1.getNodeName());
 			if( (n1.getNodeName().equals(node_name)) && (n1.getLinkImpl().isEmpty()) ) {
 				System.out.println("dentro if delNode--posso eliminarlo");
 				neo4j.delNode(nffg_name,node_name);
 				break;
 			}
-			else
-				throw new ForbiddenException();
+			else {
+				System.out.println("dentro else delNode -- non posso eliminarlo");
+			}
 		}
 		
-		/*for(NodeImpl n : nffg.getNodeImpl()) {
-			if( (n.getNodeName().equals(node_name)) && (n.getLinkImpl().isEmpty()) ) {
-				System.out.println("dentro if delNode");
-				for(NodeImpl n1 : nffg.getNodeImpl()) {
-					for(LinkImpl l1 : n1.getLinkImpl()) {
-						if(l1.getDestinationNode().equals(node_name)) {
-							System.out.println("if-- non posso eliminarlo");
-							throw new ForbiddenException();							
-						}						
-						else
-						{
-							System.out.println("else--posso eliminarlo");
-							break;
-						}
-					}
-					break;
-				}
-				break;
-				
-			}
-			else
-				throw new ForbiddenException();
-		}*/
-			
-		
-		/*for(NodeImpl n : nffg.getNodeImpl()) {			
-			if( (n.getNodeName().equals(node_name)) && (n.getLinkImpl().isEmpty()) ) {
-				System.out.println("Posso Eliminare il nodo");
-				neo4j.delNode(nffg_name,node_name);
-				break;		
-			}
-		}*/
-		
-		/*for(NodeImpl n : nffg.getNodeImpl()) {
-			if((n.getNodeName().equals(node_name)) && (n.getLinkImpl().isEmpty())  ) {
-				System.out.println("Nodo presente e senza link dentro..vedo se è presente in destNode di altri nodi ");
-				for(LinkImpl l : n.getLinkImpl()) {
-					
-					System.out.println("Link in questione: " + l.getLinkName());
-					
-					if((!l.getDestinationNode().equals(node_name))) {
-						System.out.println("Posso Eliminare il nodo perchè non è presente in nessun destnode");
-						//neo4j.delNode(nffg_name,node_name);
-						break;
-					}else {
-						System.out.println("Nodo presente in questo link--destnode: " + l.getLinkName());
-					}
-						
-				}
-				//neo4j.delNode(nffg_name,node_name);
-				//break;
-			}
-			else {
-				System.out.println("Nodo: " + n.getNodeName() + " con link dentro..non è possibile eliminarlo!");
-				break;
-			}
-		}*/
-		
-
-		
-		
-
-		/*for(NodeImpl node : nffg.getNodeImpl()) {
-			for(LinkImpl l : node.getLinkImpl()) {				
-				System.out.println("Link analizzato: " + l.getLinkName());
-					if((!l.getDestinationNode().equals(node_name))) {
-						System.out.println("Nodo no presentein nessun destNode");
-						break;
-					}
-					else {
-						System.out.println("Nodo presente in questo link--destnode: " + l.getLinkName());
-						throw new ForbiddenException("Operazione non permessa!");	
-					}
-			}
-			break;
-		}*/
-		
-		
-
 	}
 
 
